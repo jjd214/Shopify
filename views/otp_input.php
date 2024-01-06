@@ -41,7 +41,7 @@ $email = isset($_GET['email']) ? urldecode($_GET['email']) : header('Location: s
                         </form>
                         <form method="post">
                             <button type="submit" name="resendOTP" class="btn btn-success btn-block custom-btn">Resend OTP</button>
-                        </form>
+                    </form>
                 </div>
             </div>
         </div>

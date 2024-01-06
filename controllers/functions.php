@@ -103,10 +103,18 @@ function productDetails() {
     ];
 }
 
-// Add Stock
-
 function addStock() {
     $addStock = new Add_new_stock();
     $addStock->addStock($_POST);
+}
+
+function viewAllStocks() {
+
+    $id = $_GET['id'];
+
+    $allStocks = new View();
+    $stocks = $allStocks->viewAllStocks($id);
+
+    return $stocks;
 }
 ?>

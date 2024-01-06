@@ -15,8 +15,11 @@ $sellerDetails =  userDetails();
     <label for="quantity">Quantity</label>
     <input type="number" name="quantity" min="1" value="1">
 
+    <label for="quantity">Price</label>
+    <input type="number" name="price" min="1" value="1">
+
     <label for="batch_number">Batch Number</label>
-    <input type="text" id="batch_number" name="batch_number" readonly required/>
+    <input type="text" id="batch_number" name="batch_number" readonly required />
 
     <!-- Button to generate a new batch number -->
     <button type="button" id="generateButton">Generate Batch Number</button>

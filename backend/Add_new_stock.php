@@ -8,12 +8,13 @@ class Add_new_stock extends Config {
             $product_id = $_POST['product_id'];
             $brand_name = $_POST['brand_name'];
             $quantity = $_POST['quantity'];
+            $price = $_POST['price'];
             $batch_number = $_POST['batch_number'];
             $added_by = $_POST['added_by'];
             
             $connection = $this->openConnection();
-            $stmt = $connection->prepare("INSERT INTO `productItems_tbl` (`product_id`,`qty`,`vendor_name`,`batch_number`,`added_by`) VALUES (?,?,?,?,?)");
-            $stmt->execute([$product_id,$quantity,$brand_name,$batch_number,$added_by]);
+            $stmt = $connection->prepare("INSERT INTO `productItems_tbl` (`product_id`,`qty`,`price`,`vendor_name`,`batch_number`,`added_by`) VALUES (?,?,?,?,?,?)");
+            $stmt->execute([$product_id,$quantity,$price,$brand_name,$batch_number,$added_by]);
             $result = $stmt->rowCount();
 
             if($result > 0) {
