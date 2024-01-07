@@ -7,6 +7,7 @@
 // for($i = 0; $i < $total; $i++) {
 //     echo $_POST['stock_id'][$i] . " " . $_POST['qty'][$i] . " " . $_POST['price'][$i] . "<br>";
 // }
+// print_r($_POST);
 
 $sales = new Sales(new View());
 
@@ -19,6 +20,6 @@ for($i = 0; $i < $total; $i++) {
 
 }
 
-header("Location: ".$_SERVER['HTTP_REFERER']);
+// header("Location: ".$_SERVER['HTTP_REFERER']);
 
 ?>

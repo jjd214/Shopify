@@ -30,6 +30,7 @@ class Signin extends Config {
             session_start();
         }
         $_SESSION['userdata'] = array (
+            "id" => $array['id'],
             "email" => $array['email'],
             "fullname" => $array['firstname']." ".$array['lastname'],
             "access" => $array['access']

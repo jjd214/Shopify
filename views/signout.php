@@ -2,5 +2,5 @@
 session_start();
 session_unset();
 session_destroy();
-header("Location: signin.php");
+header("Location: /e-commerce/views/signin.php");
 ?>

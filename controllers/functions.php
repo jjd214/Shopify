@@ -117,4 +117,39 @@ function viewAllStocks() {
 
     return $stocks;
 }
+
+function viewItemDetails() {
+
+    $id = $_GET['id'];
+
+    $item = new View();
+    $details = $item->getItemDetails($id);
+
+    return $details;
+}
+
+function addToCart() {
+    $cart = new Add_cart();
+    $cart->addToCart();
+}
+
+function viewCartItems($customer_id) {
+    $cart = new View();
+    $items = $cart->viewCartItems($customer_id);
+
+    return $items;
+}
+
+function deleteItems() {
+    $delete = new Add_cart();
+    $delete->deleteCartItem();
+}
+
+function viewStockItems($item_id) {
+    $stock = new View();
+    $total = $stock->viewStockItems($item_id);
+
+    return $total;
+}
+
 ?>

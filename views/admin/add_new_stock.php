@@ -8,7 +8,10 @@ $product = productDetails();
 $sellerDetails =  userDetails();
 ?>
 
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
+    <label for="product_image">Product Image</label>
+    <input type="file" name="product_image">
+
     <label for="brand_name">Brand Name</label>
     <input type="text" name="brand_name" placeholder="Enter brand name" required />
 
