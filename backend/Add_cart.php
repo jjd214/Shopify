@@ -72,6 +72,12 @@ class Add_cart extends Config {
             return; // Exit the function if the update fails
         }
     }
+
+    public function deleteItem($itemid) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("DELETE FROM `cart_tbl` WHERE `item_id` = ?");
+        $stmt->execute([$itemid]);
+    }
 }
 
 ?>

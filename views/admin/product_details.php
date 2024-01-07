@@ -19,7 +19,6 @@
 <?php $product = productDetails(); ?>
 <?php $stocks = viewAllStocks(); ?>
 <?php $customerName = userDetails(); ?>
-<?php print_r($stocks); ?>
 <?php $inventoryArr = array(); ?>
 
 <h1><?= $product['productDetails']['product_name']; ?></h1>

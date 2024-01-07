@@ -17,6 +17,8 @@ for ($i = 0; $i < $total; $i++) {
         $_POST['product_id'],
         $_POST['customer_name']
     );
+    // Delete each item from the cart
+    $deduct->deleteItem($_POST['cart_id'][$i]);
 }
 
 header("Location: ".$_SERVER['HTTP_REFERER']);

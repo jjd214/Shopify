@@ -2,8 +2,8 @@
 <?php include('../partials/__header.php'); ?>
 <style>
     .logo-img {
-        max-width: 100%; /* Adjust the maximum width as needed */
-        height: 200px; /* Maintain the aspect ratio */
+        max-width: 100%;
+        height: 200px;
     }
 
     .card {
@@ -47,6 +47,13 @@
                             <label for="confirmPassword" class="form-label">Confirm Password</label>
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password..." required>
                         </div>
+                        <div class="mb-3">
+                            <label for="accountType" class="form-label">Account Type</label>
+                            <select class="form-select" id="accountType" name="accountType" required>
+                                <option value="personal">Personal</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
                         <button type="submit" class="btn btn-primary btn-block" name="submit">Sign Up</button>
                     </form>
                     <hr class="my-4">
@@ -58,4 +65,3 @@
 </div>
 
 <?php include('../partials/__footer.php'); ?>
-

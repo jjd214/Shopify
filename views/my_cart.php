@@ -1,6 +1,13 @@
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/partials/__header.php'); ?>
 
+<style>
+    tr.disabled-row {
+    opacity: 0.5;
+    pointer-events: none; 
+}
+
+</style>
 <?php $customerID = userDetails(); ?>
 <?php $carts = viewCartItems($customerID['id']); ?>
 <?php deleteItems(); ?>
@@ -10,7 +17,7 @@
 
     <?php if ($carts !== null && !empty($carts)): ?>
         <form action="checkout.php" method="post">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="cartTable">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -28,19 +35,21 @@
                             <th scope="row"><?= $index + 1 ?></th>
                             <td><?= $cartItem['item_name'] ?></td>
                             <td>
-                                <input type="number" name="qty[<?= $index ?>]" min="1" max="<?= $itemQty ?>" value="<?= $cartItem['qty'] ?>">
+                                <input type="number" name="qty[<?= $index ?>]" min="1" max="<?= $itemQty ?>" value="<?= $cartItem['qty'] ?>" class="qty-input">
                                 <input type="hidden" name="cart_id[<?= $index ?>]" value="<?= $cartItem['id'] ?>">
                                 <input type="hidden" name="stock_id[<?= $index ?>]" value="<?= $cartItem['item_id'] ?>">
                                 <input type="hidden" name="price[<?= $index ?>]" value="<?= $cartItem['price'] ?>">
+                                <input type="hidden" name="item_id[<?= $index ?>]" value="<?= $cartItem['item_id'] ?>">
                             </td>
-                            <td>$<?= $cartItem['price'] ?></td>
-                            <td>$<?= $cartItem['qty'] * $cartItem['price'] ?></td>
+                            <td>₱ <?= $cartItem['price'] ?></td>
+                            <td class="total">₱ <?= $cartItem['qty'] * $cartItem['price'] ?></td>
                             <td>
                                 <form action="" method="post">
-                                    <button type="submit" name="delete_item" class="delete-button">
+                                    <input type="hidden" name="stock_id[<?= $index ?>]" value="<?= $cartItem['item_id'] ?>">
+                                    <button type="submit" name="delete_item" class="delete-button" value="<?= $cartItem['item_id'] ?>">
                                         <i class="fas fa-trash-alt"></i> Delete
                                     </button>
-                                </form>
+                                </form>     
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -58,12 +67,32 @@
 </div>
 
 <script>
-    function deleteCartItem(cartId) {
-        if (confirm('Are you sure you want to delete this item from your cart?')) {
-            console.log('Item deleted from cart:', cartId);
-            // You can add AJAX here to send a request to the server to delete the item
+    document.addEventListener('DOMContentLoaded', function () {
+        const qtyInputs = document.querySelectorAll('.qty-input');
+
+        qtyInputs.forEach(function (qtyInput) {
+            qtyInput.addEventListener('input', function () {
+                updateTotal(qtyInput);
+            });
+        });
+
+        function updateTotal(qtyInput) {
+            const row = qtyInput.closest('tr');
+            const price = parseFloat(row.querySelector('td:nth-child(4)').innerText.replace('₱', '').trim());
+            const qty = parseInt(qtyInput.value);
+            const totalCell = row.querySelector('.total');
+            const total = price * qty;
+            totalCell.innerText = '₱ ' + total.toFixed(2);
+
+            if (qty === 0) {
+                row.classList.add('disabled-row');
+            } else {
+                row.classList.remove('disabled-row');
+            }
         }
-    }
+    });
 </script>
+
+
 
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/partials/__footer.php'); ?>
