@@ -10,6 +10,7 @@ class Add_new_product extends Config {
             $product_type = $_POST['product_type'];
             $description = $_POST['description'];
             $min_stock = $_POST['min_stock'];
+            $seller = $_POST['name'];
 
             if($this->checkProductExist($product_name) > 0) {
 
@@ -18,8 +19,8 @@ class Add_new_product extends Config {
             } else {
 
                 $connection = $this->openConnection();
-                $stmt = $connection->prepare("INSERT INTO `products_tbl` (`product_name`,`product_type`,`description`,`min_stock`) VALUES (?,?,?,?)");
-                $stmt->execute([$product_name,$product_type,$description,$min_stock]);
+                $stmt = $connection->prepare("INSERT INTO `products_tbl` (`product_name`,`product_type`,`description`,`min_stock`,`added_by`) VALUES (?,?,?,?,?)");
+                $stmt->execute([$product_name,$product_type,$description,$min_stock,$seller]);
                 $result = $stmt->rowCount();
     
                 if($result > 0) {

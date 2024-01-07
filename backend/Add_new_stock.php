@@ -16,6 +16,7 @@ class Add_new_stock extends Config {
             $price = $_POST['price'];
             $batch_number = $_POST['batch_number'];
             $added_by = $_POST['added_by'];
+            $description = $_POST['description'];
             
             if ($error === 0) {
                 $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
@@ -33,8 +34,8 @@ class Add_new_stock extends Config {
                     move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'] . $img_upload_path);
     
                     $connection = $this->openConnection();
-                    $stmt = $connection->prepare("INSERT INTO `productItems_tbl` (`product_id`,`product_image`,`qty`,`price`,`vendor_name`,`batch_number`,`added_by`) VALUES (?,?,?,?,?,?,?)");
-                    $stmt->execute([$product_id, $new_img_name, $quantity, $price, $brand_name, $batch_number, $added_by]);
+                    $stmt = $connection->prepare("INSERT INTO `productItems_tbl` (`product_id`,`product_image`,`description`,`qty`,`price`,`vendor_name`,`batch_number`,`added_by`) VALUES (?,?,?,?,?,?,?,?)");
+                    $stmt->execute([$product_id, $new_img_name, $description, $quantity, $price, $brand_name, $batch_number, $added_by]);
                     $result = $stmt->rowCount();
     
                     if($result > 0) {

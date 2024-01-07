@@ -15,30 +15,25 @@ class Signup extends Config {
             $password = md5($_POST['password']);
             $confirmPassword = md5($_POST['confirmPassword']);
             $verify_token = md5(rand());
-
             $otp = $this->generateOTP();
 
             if($this->emailExists($email) > 0) {
-
                 echo '<div class="alert alert-info alert-dismissible fade show" role="alert">
-                        Email already exist.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>';
-
+                        Email already exists.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>';
             } else if (!$this->validatePassword($_POST['password'])) {
-
                 echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
                         Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                       </div>';
-
             } else if (!$this->passwordsMatch($_POST['password'], $_POST['confirmPassword'])) {
                 echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
                         Passwords do not match.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                       </div>';
             } else {
-                // Save user information and verify token in session
+                // Save user information, verify token, and account type in session
                 $_SESSION['signup_data'] = [
                     'firstname' => $firstname,
                     'lastname' => $lastname,
@@ -47,11 +42,12 @@ class Signup extends Config {
                     'password' => $password,
                     'verify_token' => $verify_token,
                     'otp' => $otp,
+                    'account_type' => $_POST['accountType'],
                 ];
-    
+
                 // Send the OTP to the user's email
                 $this->verifyEmail($_SESSION['signup_data']);
-    
+
                 // Redirect to OTP verification page
                 // header("Location: otp_input.php");
                 // exit();
@@ -234,26 +230,34 @@ class Signup extends Config {
     public function insertUserIntoDatabase() {
         // Retrieve user data from the session
         $userData = $_SESSION['signup_data'];
-    
-        // Extract user data
+
+        // Extract user data including account type
         $firstname = $userData['firstname'];
         $lastname = $userData['lastname'];
         $middlename = $userData['middlename'];
         $email = $userData['email'];
         $password = $userData['password'];
         $verify_token = $userData['verify_token'];
-    
-        // Insert user into the database
+        $account_type = $userData['account_type'];
+
+        $access = 'customer';
+        
+        // If the account type is business, change access to "seller"
+        if ($account_type === 'business') {
+            $access = 'seller';
+        }
+
+        // Insert user into the database with account_type
         $connection = $this->openConnection();
-        $stmt = $connection->prepare("INSERT INTO `user_tbl` (`firstname`,`lastname`,`middlename`,`email`,`password`,`verify_token`) VALUES(?,?,?,?,?,?)");
-        $stmt->execute([$firstname, $lastname, $middlename, $email, $password, $verify_token]);
+        $stmt = $connection->prepare("INSERT INTO `user_tbl` (`firstname`,`lastname`,`middlename`,`email`,`password`,`account_type`, `access`, `verify_token`) VALUES(?,?,?,?,?,?,?,?)");
+        $stmt->execute([$firstname, $lastname, $middlename, $email, $password, $account_type, $access, $verify_token]);
         $result = $stmt->rowCount();
-    
+
         if ($result > 0) {
-            // echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            //         User successfully registered.
-            //         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            //       </div>';
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    User successfully registered.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>';
         } else {
             echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                     Failed to register user.

@@ -91,6 +91,15 @@ class View extends Config {
 
         return $data;
     }
+
+    public function viewSellerProducts($name) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `products_tbl` WHERE `added_by` = ?");
+        $stmt->execute([$name]);
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
     
 }
 

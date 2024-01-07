@@ -152,4 +152,11 @@ function viewStockItems($item_id) {
     return $total;
 }
 
+function viewSellerProduct($name) {
+    $seller = new View();
+    $product = $seller->viewSellerProducts($name);
+
+    return $product;
+}
+
 ?>
