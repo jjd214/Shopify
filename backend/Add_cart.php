@@ -1,7 +1,7 @@
 <?php
 class Add_cart extends Config {
 
-    public function addToCart() {
+    public function addToMyCart() {
 
         if(isset($_POST['add_cart'])) {
     
@@ -37,6 +37,32 @@ class Add_cart extends Config {
                 echo "Item not added to cart or there was an issue updating quantity in cart_tbl.";
             }
         }
+    }
+
+    public function addToCart($customer_id,$item_id,$product_id,$item_name,$price) {
+
+            $connection = $this->openConnection();
+    
+            // Check if the item already exists in the cart
+            $stmtCheck = $connection->prepare("SELECT * FROM `cart_tbl` WHERE `user_id` = ? AND `item_id` = ?");
+            $stmtCheck->execute([$customer_id, $item_id]);
+            $existingItem = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+    
+            if ($existingItem) {
+                $result = 1;
+                echo '<script>alert("Item already added")</script>';
+            } else {
+                // Item does not exist, insert a new row
+                $stmtInsert = $connection->prepare("INSERT INTO `cart_tbl` (`user_id`, `item_id`, `product_id`,  `item_name`, `price`) VALUES (?, ?, ?, ?, ?)");
+                $stmtInsert->execute([$customer_id,$item_id,$product_id,$item_name,$price]);
+                $result = $stmtInsert->rowCount();
+            }
+    
+            if($result > 0) {
+                echo "Item added to cart, and quantity updated in cart_tbl.";
+            } else {
+                echo "Item not added to cart or there was an issue updating quantity in cart_tbl.";
+            }
     }
 
     public function deleteCartItem() {

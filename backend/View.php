@@ -23,7 +23,8 @@ class View extends Config {
         if($result > 0) {
             return $data;
         } else {
-            header("Location: /e-commerce/error/page404.php");
+            // header("Location: /e-commerce/error/page404.php");
+            null;
         }
     }
 
@@ -71,7 +72,6 @@ class View extends Config {
         $data = $stmt->fetch();
         
         return $data;
-
     }
 
     public function viewCartItems($id) {
@@ -97,10 +97,75 @@ class View extends Config {
         $stmt = $connection->prepare("SELECT * FROM `products_tbl` WHERE `added_by` = ?");
         $stmt->execute([$name]);
         $data = $stmt->fetchAll();
+        
+        return $data;
+    }
+
+    public function viewAllBusinessAccount() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `user_tbl`");
+        $stmt->execute();
+        $data = $stmt->fetchAll();
 
         return $data;
     }
+
+    public function viewSingleStoreDetails($id) {
+
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `user_tbl` WHERE `id` = ?");
+        $stmt->execute([$id]);
+        $data = $stmt->fetch();
+
+        return $data;
+    }
+
+    public function viewLatestProducts($name) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `productItems_tbl` WHERE `added_by` = ? ORDER BY added_at DESC LIMIT 9");
+        $stmt->execute([$name]);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
+        return $results;
+    }
+
+    public function viewSellerName($id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT `firstname`, `lastname` FROM `user_tbl` WHERE `id` = ?");
+        $stmt->execute([$id]);
+        $data = $stmt->fetch();
+    
+        $name = $data['firstname']." ".$data['lastname'];
+    
+        return $name;
+    }
+
+    public function getProductId($id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT `product_id` FROM `productItems_tbl` WHERE `id` = ?");
+        $stmt->execute([$id]);
+        $data = $stmt->fetch();
+
+        return $data;
+    }
+
+    public function viewRelatedProducts($id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `productItems_tbl` WHERE `product_id` = ? ORDER BY RAND() LIMIT 12");
+        $stmt->execute([$id['product_id']]); 
+        $data = $stmt->fetchAll();
+    
+        return $data;
+    }   
+
+    public function getRandomProducts($name) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `productItems_tbl` WHERE `added_by` = ? ORDER BY RAND()");
+        $stmt->execute([$name]);
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
 }
 
 ?>

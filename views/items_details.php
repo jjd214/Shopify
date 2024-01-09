@@ -8,7 +8,7 @@
 
 <img src="/e-commerce/uploads/<?= isset($itemDetails['product_image']) ? $itemDetails['product_image'] : 'default.png' ?>" alt="Product Image" height="150px" width="180">
 <p><?= $itemDetails['vendor_name'] ?></p>
-<p>Description: Lorem ipsum</p>
+<p>Description: <?= $itemDetails['description'] ?></p>
 <p>Price : <?= $itemDetails['price'] ?></p>
 <p>Available stock : <?= $itemDetails['qty'] ?></p>
 

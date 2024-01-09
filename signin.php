@@ -1,5 +1,5 @@
-<?php require_once('../php/init.php'); ?>
-<?php include('../partials/__header.php'); ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/partials/__header.php'); ?>
 
 <style>
     .logo-img {
@@ -74,4 +74,5 @@
     });
 </script>
 
-<?php include('../partials/__footer.php'); ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/partials/__footer.php'); ?>
+

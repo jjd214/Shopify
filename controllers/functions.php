@@ -70,7 +70,7 @@ function access() {
 function userDetails() {
     $signin = new Signin();
     $access = $signin->get_session();
-
+    
     return $access;
 }
 
@@ -93,14 +93,21 @@ function viewProducts() {
 }
 
 function productDetails() {
-    $id = $_GET['id'];
+    // Check if 'id' is set in $_GET
+    $id = isset($_GET['id']) ? $_GET['id'] : null;
 
-    $productDetails = new View();
+    // Only proceed if 'id' is set
+    if ($id !== null) {
+        $productDetails = new View();
 
-    return [
-        'productDetails' => $productDetails->getSingleProductDetails($id),
-        'totalQuantity' => $productDetails->getTotalQuantity($id)
-    ];
+        return [
+            'productDetails' => $productDetails->getSingleProductDetails($id),
+            'totalQuantity' => $productDetails->getTotalQuantity($id)
+        ];
+    }
+
+    // Return an empty array or handle the case where 'id' is not set
+    return [];
 }
 
 function addStock() {
@@ -109,18 +116,32 @@ function addStock() {
 }
 
 function viewAllStocks() {
+    // Check if 'id' is set in $_GET
+    $id = isset($_GET['id']) ? $_GET['id'] : $_SESSION['store_id'];
 
-    $id = $_GET['id'];
+    // Only proceed if 'id' is set
+    if ($id !== null) {
+        $allStocks = new View();
+        $stocks = $allStocks->viewAllStocks($id);
 
-    $allStocks = new View();
-    $stocks = $allStocks->viewAllStocks($id);
+        return $stocks;
+    }
 
-    return $stocks;
+    // Return an empty array or handle the case where 'id' is not set
+    return [];
 }
+
+function getRandomProducts($name) {
+    $view = new View();
+    $products = $view->getRandomProducts($name);
+
+    return $products;
+}
+
 
 function viewItemDetails() {
 
-    $id = $_GET['id'];
+    $id = isset($_GET['id']) ? $_GET['id'] : $_SESSION['store_id'];
 
     $item = new View();
     $details = $item->getItemDetails($id);
@@ -128,9 +149,14 @@ function viewItemDetails() {
     return $details;
 }
 
-function addToCart() {
+function addToMyCart() {
     $cart = new Add_cart();
-    $cart->addToCart();
+    $cart->addToMyCart();
+}
+
+function addToCart($customer_id,$item_id,$product_id,$item_name,$price) {
+    $cart = new Add_cart();
+    $cart->addToCart($customer_id,$item_id,$product_id,$item_name,$price);
 }
 
 function viewCartItems($customer_id) {
@@ -157,6 +183,54 @@ function viewSellerProduct($name) {
     $product = $seller->viewSellerProducts($name);
 
     return $product;
+}
+
+function businessSettings() {
+    $settings = new Account_settings();
+    $settings->businessSettings();
+}
+
+function viewStores() {
+    $stores = new View();
+    $store = $stores->viewAllBusinessAccount();
+
+    return $store;
+}
+
+function viewSingleStoreDetails($id) {
+
+    $store = new View();
+    $details = $store->viewSingleStoreDetails($id);
+
+    return $details;
+}
+
+function viewLatestProducts($name) {
+    $view = new View();
+    $products = $view->viewLatestProducts($name);
+
+    return $products;
+}
+
+function viewSellerName($id) {
+    $view = new View();
+    $name = $view->viewSellerName($id);
+
+    return $name;
+}
+
+function getProductId($id) {
+    $fetch = new View();
+    $id = $fetch->getProductId($id);
+
+    return $id;
+}
+
+function viewRelatedProducts($id) {
+    $view = new View();
+    $products = $view->viewRelatedProducts($id);
+
+    return $products;
 }
 
 ?>

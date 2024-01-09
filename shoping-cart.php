@@ -1,3 +1,8 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
+
+<?php $customerID = userDetails(); ?>
+<?php $carts = viewCartItems($customerID['id']); ?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -58,18 +63,18 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./shop-grid.html">Shop</a></li>
+                <li class="active"><a href="./index.php">Home</a></li>
+                <li><a href="./shop-grid.php">Shop</a></li>
                 <li><a href="#">Pages</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
+                        <li><a href="./shop-details.php">Shop Details</a></li>
+                        <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                        <li><a href="./checkout.php">Check Out</a></li>
+                        <li><a href="./blog-details.php">Blog Details</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="./blog.php">Blog</a></li>
+                <li><a href="./contact.php">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -130,24 +135,23 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        <a href="./index.php"><img src="img/logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li><a href="./shop-grid.html">Shop</a></li>
+                            <li><a href="./index.php">Home</a></li>
+                            <li class="active"><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                                    <li><a href="./checkout.php">Check Out</a></li>
+                                    <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li class="active"><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contact.php">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -221,206 +225,121 @@
     </section>
     <!-- Hero Section End -->
 
-    <!-- Blog Details Hero Begin -->
-    <section class="blog-details-hero set-bg" data-setbg="img/blog/details/details-hero.jpg">
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="blog__details__hero__text">
-                        <h2>The Moment You Need To Remove Garlic From The Menu</h2>
-                        <ul>
-                            <li>By Michael Scofield</li>
-                            <li>January 14, 2019</li>
-                            <li>8 Comments</li>
-                        </ul>
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Shopping Cart</h2>
+                        <div class="breadcrumb__option">
+                            <a href="./index.html">Home</a>
+                            <span>Shopping Cart</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Blog Details Hero End -->
+    <!-- Breadcrumb Section End -->
 
-    <!-- Blog Details Section Begin -->
-    <section class="blog-details spad">
+    <!-- Shoping Cart Section Begin -->
+<?php if ($carts !== null && !empty($carts)): ?>
+    <form action="checkout.php" method="post">
+    <section class="shoping-cart spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 col-md-5 order-md-1 order-2">
-                    <div class="blog__sidebar">
-                        <div class="blog__sidebar__search">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                            <table id="cartTable">
+                                <thead>
+                                    <tr>
+                                        <th class="shoping__product">Items</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($carts as $index => $cartItem): ?>
+                                        <?php $itemQty = viewStockItems($cartItem['item_id']); ?>
+                                        <tr>
+                                            <td class="shoping__cart__item">
+                                                <h5><?= $cartItem['item_name'] ?></h5>
+                                            </td>
+                                            <td class="shoping__cart__quantity">
+                                                <div class="quantity">
+                                                    <div class="pro-qty">
+                                                        <input type="number" name="qty[<?= $index ?>]" min="1" max="<?= $itemQty ?>" value="<?= $cartItem['qty'] ?>" class="qty-input" data-price="<?= $cartItem['price'] ?>">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="shoping__cart__price">
+                                                <input type="hidden" name="price[<?= $index ?>]" value="<?= $cartItem['price'] ?>">
+                                                <?= $cartItem['price'] ?>
+                                            </td>
+                                            <td class="shoping__cart__total">
+                                                 <span class="total-amount"><?= $cartItem['qty'] * $cartItem['price'] ?></span>
+                                            </td>
+                                            <td class="shoping__cart__item__close">
+                                                    <input type="hidden" name="stock_id[<?= $index ?>]" value="<?= $cartItem['item_id'] ?>">
+                                                    <button type="submit" name="delete_item" class="btn btn-danger" value="<?= $cartItem['item_id'] ?>">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                            <input type="hidden" name="product_id" value="<?= $cartItem['product_id'] ?>">
+                            <input type="hidden" name="customer_name" value="<?= $customerID['fullname'] ?>">
+                            <!-- <button type="submit" name="checkout" class="checkout-button">
+                                Checkout All Items
+                            </button> -->
+                       
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__btns">
+                        <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                        <a href="#" class="primary-btn cart-btn cart-btn-right" id="updateCartBtn">
+                            <span class="icon_loading"></span> Update Cart
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="shoping__continue">
+                        <div class="shoping__discount">
+                            <h5>Discount Codes</h5>
                             <form action="#">
-                                <input type="text" placeholder="Search...">
-                                <button type="submit"><span class="icon_search"></span></button>
+                                <input type="text" placeholder="Enter your coupon code">
+                                <button type="submit" class="site-btn">APPLY COUPON</button>
                             </form>
                         </div>
-                        <div class="blog__sidebar__item">
-                            <h4>Categories</h4>
-                            <ul>
-                                <li><a href="#">All</a></li>
-                                <li><a href="#">Beauty (20)</a></li>
-                                <li><a href="#">Food (5)</a></li>
-                                <li><a href="#">Life Style (9)</a></li>
-                                <li><a href="#">Travel (10)</a></li>
-                            </ul>
-                        </div>
-                        <div class="blog__sidebar__item">
-                            <h4>Recent News</h4>
-                            <div class="blog__sidebar__recent">
-                                <a href="#" class="blog__sidebar__recent__item">
-                                    <div class="blog__sidebar__recent__item__pic">
-                                        <img src="img/blog/sidebar/sr-1.jpg" alt="">
-                                    </div>
-                                    <div class="blog__sidebar__recent__item__text">
-                                        <h6>09 Kinds Of Vegetables<br /> Protect The Liver</h6>
-                                        <span>MAR 05, 2019</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="blog__sidebar__recent__item">
-                                    <div class="blog__sidebar__recent__item__pic">
-                                        <img src="img/blog/sidebar/sr-2.jpg" alt="">
-                                    </div>
-                                    <div class="blog__sidebar__recent__item__text">
-                                        <h6>Tips You To Balance<br /> Nutrition Meal Day</h6>
-                                        <span>MAR 05, 2019</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="blog__sidebar__recent__item">
-                                    <div class="blog__sidebar__recent__item__pic">
-                                        <img src="img/blog/sidebar/sr-3.jpg" alt="">
-                                    </div>
-                                    <div class="blog__sidebar__recent__item__text">
-                                        <h6>4 Principles Help You Lose <br />Weight With Vegetables</h6>
-                                        <span>MAR 05, 2019</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="blog__sidebar__item">
-                            <h4>Search By</h4>
-                            <div class="blog__sidebar__item__tags">
-                                <a href="#">Apple</a>
-                                <a href="#">Beauty</a>
-                                <a href="#">Vegetables</a>
-                                <a href="#">Fruit</a>
-                                <a href="#">Healthy Food</a>
-                                <a href="#">Lifestyle</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <div class="col-lg-8 col-md-7 order-md-1 order-1">
-                    <div class="blog__details__text">
-                        <img src="img/blog/details/details-pic.jpg" alt="">
-                        <p>Sed porttitor lectus nibh. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet
-                            dui. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Mauris blandit
-                            aliquet elit, eget tincidunt nibh pulvinar a. Vivamus magna justo, lacinia eget consectetur
-                            sed, convallis at tellus. Sed porttitor lectus nibh. Donec sollicitudin molestie malesuada.
-                            Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Proin eget tortor risus.
-                            Donec rutrum congue leo eget malesuada. Curabitur non nulla sit amet nisl tempus convallis
-                            quis ac lectus. Donec sollicitudin molestie malesuada. Nulla quis lorem ut libero malesuada
-                            feugiat. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.</p>
-                        <h3>The corner window forms a place within a place that is a resting point within the large
-                            space.</h3>
-                        <p>The study area is located at the back with a view of the vast nature. Together with the other
-                            buildings, a congruent story has been managed in which the whole has a reinforcing effect on
-                            the components. The use of materials seeks connection to the main house, the adjacent
-                            stables</p>
-                    </div>
-                    <div class="blog__details__content">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="blog__details__author">
-                                    <div class="blog__details__author__pic">
-                                        <img src="img/blog/details/details-author.jpg" alt="">
-                                    </div>
-                                    <div class="blog__details__author__text">
-                                        <h6>Michael Scofield</h6>
-                                        <span>Admin</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="blog__details__widget">
-                                    <ul>
-                                        <li><span>Categories:</span> Food</li>
-                                        <li><span>Tags:</span> All, Trending, Cooking, Healthy Food, Life Style</li>
-                                    </ul>
-                                    <div class="blog__details__social">
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
-                                        <a href="#"><i class="fa fa-twitter"></i></a>
-                                        <a href="#"><i class="fa fa-google-plus"></i></a>
-                                        <a href="#"><i class="fa fa-linkedin"></i></a>
-                                        <a href="#"><i class="fa fa-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="col-lg-6">
+                    <div class="shoping__checkout">
+                        <h5>Cart Total</h5>
+                        <ul id="cartTotalList">
+                            <li>Subtotal <span id="subtotalAmount">₱ 0.00</span></li>
+                            <li>Total <span id="cartTotal">₱ 0.00</span></li>
+                        </ul>
+                        <button type="submit" name="submit" style="border: none; width: 100%;" class="primary-btn">PROCEED TO CHECKOUT</button>
                     </div>
                 </div>
             </div>
         </div>
+        </form>
     </section>
-    <!-- Blog Details Section End -->
-
-    <!-- Related Blog Section Begin -->
-    <section class="related-blog spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-title related-blog-title">
-                        <h2>Post You May Like</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic">
-                            <img src="img/blog/blog-1.jpg" alt="">
-                        </div>
-                        <div class="blog__item__text">
-                            <ul>
-                                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                <li><i class="fa fa-comment-o"></i> 5</li>
-                            </ul>
-                            <h5><a href="#">Cooking tips make cooking simple</a></h5>
-                            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic">
-                            <img src="img/blog/blog-2.jpg" alt="">
-                        </div>
-                        <div class="blog__item__text">
-                            <ul>
-                                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                <li><i class="fa fa-comment-o"></i> 5</li>
-                            </ul>
-                            <h5><a href="#">6 ways to prepare breakfast for 30</a></h5>
-                            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic">
-                            <img src="img/blog/blog-3.jpg" alt="">
-                        </div>
-                        <div class="blog__item__text">
-                            <ul>
-                                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                <li><i class="fa fa-comment-o"></i> 5</li>
-                            </ul>
-                            <h5><a href="#">Visit the clean farm in the US</a></h5>
-                            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Related Blog Section End -->
+    <!-- Shoping Cart Section End -->
+    <?php else : ?>
+        <p>Your cart is empty</p>
+    <?php endif; ?>
 
     <!-- Footer Section Begin -->
     <footer class="footer spad">
@@ -496,6 +415,45 @@
     </footer>
     <!-- Footer Section End -->
 
+<script>
+    // Add an event listener for input changes to recalculate total
+    document.querySelectorAll('.qty-input').forEach(function (input) {
+        input.addEventListener('input', function () {
+            const price = parseFloat(input.getAttribute('data-price'));
+            const quantity = parseInt(input.value);
+
+            if (!isNaN(quantity) && quantity >= 1) {
+                const totalAmount = quantity * price;
+                input.closest('tr').querySelector('.total-amount').textContent = '₱ ' + totalAmount.toFixed(2);
+                updateCartTotal();
+            } else {
+                alert('Please enter a valid quantity.');
+            }
+        });
+    });
+
+    // Add an event listener for the update cart button
+    document.getElementById('updateCartBtn').addEventListener('click', function () {
+        updateCartTotal();
+    });
+
+    function updateCartTotal() {
+        const totalElements = document.querySelectorAll('.total-amount');
+        let subtotal = 0;
+
+        totalElements.forEach(function (element) {
+            subtotal += parseFloat(element.textContent.replace('₱ ', ''));
+        });
+
+        const subtotalElement = document.getElementById('subtotalAmount');
+        const cartTotalElement = document.getElementById('cartTotal');
+        
+        subtotalElement.textContent = '₱ ' + subtotal.toFixed(2);
+        cartTotalElement.textContent = '₱ ' + subtotal.toFixed(2);
+    }
+</script>
+
+
     <!-- Js Plugins -->
     <script src="javascript/jquery-3.3.1.min.js"></script>
     <script src="javascript/bootstrap.min.js"></script>
@@ -505,7 +463,6 @@
     <script src="javascript/mixitup.min.js"></script>
     <script src="javascript/owl.carousel.min.js"></script>
     <script src="javascript/main.js"></script>
-
 
 
 </body>
