@@ -22,7 +22,7 @@ if(isset($_POST['delete_item'])) {
             $_POST['customer_name']
         );
         // Delete each item from the cart
-        $deduct->deleteItem($_POST['cart_id'][$i]);
+        $deduct->deleteItem($_POST['stock_id'][$i]);
     }
     
     header("Location: ".$_SERVER['HTTP_REFERER']);

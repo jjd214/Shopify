@@ -67,11 +67,11 @@ class Add_cart extends Config {
 
     public function deleteCartItem($item_id) {  
 
-            $connection = $this->openConnection();
-            $stmt = $connection->prepare("DELETE FROM `cart_tbl` WHERE `item_id` = ?");
-            $stmt->execute([$item_id]);
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("DELETE FROM `cart_tbl` WHERE `item_id` = ?");
+        $stmt->execute([$item_id]);
 
-            header("Location: ".$_SERVER['HTTP_REFERER']);
+        header("Location: ".$_SERVER['HTTP_REFERER']);
     }
 
     public function deductQtyItem($qty, $itemid) {
@@ -97,6 +97,8 @@ class Add_cart extends Config {
         $connection = $this->openConnection();
         $stmt = $connection->prepare("DELETE FROM `cart_tbl` WHERE `item_id` = ?");
         $stmt->execute([$itemid]);
+
+        header("Location: ".$_SERVER['HTTP_REFERER']);
     }
 }
 
