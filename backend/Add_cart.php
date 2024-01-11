@@ -65,19 +65,13 @@ class Add_cart extends Config {
             }
     }
 
-    public function deleteCartItem() {
-
-        if(isset($_POST['delete_item'])) {
-
-            $itemid = $_POST['item_id'];
+    public function deleteCartItem($item_id) {  
 
             $connection = $this->openConnection();
             $stmt = $connection->prepare("DELETE FROM `cart_tbl` WHERE `item_id` = ?");
-            $stmt->execute([$itemid]);
+            $stmt->execute([$item_id]);
 
-            header("Refresh: 0");
-        }
-
+            header("Location: ".$_SERVER['HTTP_REFERER']);
     }
 
     public function deductQtyItem($qty, $itemid) {

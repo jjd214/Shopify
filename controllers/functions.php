@@ -166,9 +166,9 @@ function viewCartItems($customer_id) {
     return $items;
 }
 
-function deleteItems() {
+function deleteItems($item_id) {
     $delete = new Add_cart();
-    $delete->deleteCartItem();
+    $delete->deleteCartItem($item_id);
 }
 
 function viewStockItems($item_id) {

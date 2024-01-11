@@ -30,7 +30,7 @@ $user = $access;
 
 <?php $product = productDetails(); ?>
 <?php $stocks = viewAllStocks(); ?>
-<?php $randProducts = getRandomProducts($user['fullname']); ?>
+<?php $randProducts = getRandomProducts($seller); ?>
 
 
 <!DOCTYPE html>

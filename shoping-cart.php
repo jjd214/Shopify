@@ -284,6 +284,7 @@
                                             </td>
                                             <td class="shoping__cart__item__close">
                                                     <input type="hidden" name="stock_id[<?= $index ?>]" value="<?= $cartItem['item_id'] ?>">
+                                                    <input type="hidden" name="item_id" value="<?= $cartItem['item_id'] ?>">
                                                     <button type="submit" name="delete_item" class="btn btn-danger" value="<?= $cartItem['item_id'] ?>">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
