@@ -18,21 +18,6 @@ $total = array_sum(array_map(function($qty, $price) {
     return $qty * $price;
 }, $qtys, $prices));
 
-// Print the values
-echo "Stock IDs: ";
-print_r($stock_ids);
-
-echo "<br>Quantities: ";
-print_r($qtys);
-
-echo "<br>Prices: ";
-print_r($prices);
-
-echo "<br>Product ID: $product_id";
-echo "<br>Customer Name: $customer_name";
-
-echo "<br>Total: $total";  // Print the total
-
 $items = viewCheckOutItems($stock_ids);
 
 if(isset($_POST['place_order'])) {
