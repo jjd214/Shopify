@@ -1,7 +1,60 @@
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
 
-<?php $customerID = userDetails(); ?>
-<?php $carts = viewCartItems($customerID['id']); ?>
+<?php   
+// checkout.php
+
+// Start the session
+session_start();
+
+// Retrieve values from session
+$stock_ids = $_SESSION['stock_ids'];
+$qtys = $_SESSION['qtys'];
+$prices = $_SESSION['prices'];
+$product_id = $_SESSION['product_id'];
+$customer_name = $_SESSION['customer_name'];
+
+// Calculate the total in checkout.php
+$total = array_sum(array_map(function($qty, $price) {
+    return $qty * $price;
+}, $qtys, $prices));
+
+// Print the values
+echo "Stock IDs: ";
+print_r($stock_ids);
+
+echo "<br>Quantities: ";
+print_r($qtys);
+
+echo "<br>Prices: ";
+print_r($prices);
+
+echo "<br>Product ID: $product_id";
+echo "<br>Customer Name: $customer_name";
+
+echo "<br>Total: $total";  // Print the total
+
+$items = viewCheckOutItems($stock_ids);
+
+if(isset($_POST['place_order'])) {
+    $deduct = new Add_cart();
+    $sales = new Sales(new View());
+
+    $deduct->deductQtyItem($qtys, $stock_ids);
+    $sales->insertSales(
+        $stock_ids,
+        $qtys,
+        $prices,
+        $product_id,
+        $customer_name
+    );
+
+    $deduct->deleteItem($stock_ids);
+    
+    header("Location: shoping-cart.php");
+    exit();
+}
+// print_r($items);
+?>
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -63,18 +116,18 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="./index.php">Home</a></li>
-                <li><a href="./shop-grid.php">Shop</a></li>
+                <li class="active"><a href="./index.html">Home</a></li>
+                <li><a href="./shop-grid.html">Shop</a></li>
                 <li><a href="#">Pages</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.php">Shop Details</a></li>
-                        <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                        <li><a href="./checkout.php">Check Out</a></li>
-                        <li><a href="./blog-details.php">Blog Details</a></li>
+                        <li><a href="./shop-details.html">Shop Details</a></li>
+                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                        <li><a href="./checkout.html">Check Out</a></li>
+                        <li><a href="./blog-details.html">Blog Details</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.php">Blog</a></li>
-                <li><a href="./contact.php">Contact</a></li>
+                <li><a href="./blog.html">Blog</a></li>
+                <li><a href="./contact.html">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -135,23 +188,24 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="./index.php"><img src="img/logo.png" alt=""></a>
+                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="./index.php">Home</a></li>
-                            <li class="active"><a href="./stores.php">Stores</a></li>
+                            <li><a href="./index.html">Home</a></li>
+                            <li class="active"><a href="./shop-grid.html">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
-                                    <li><a href="./blog-details.php">Blog Details</a></li>
+                                    <li><a href="./shop-details.html">Shop Details</a></li>
+                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                                    <li><a href="./checkout.html">Check Out</a></li>
+                                    <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./blog.html">Blog</a></li>
+                            <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -231,10 +285,10 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Shopping Cart</h2>
+                        <h2>Checkout</h2>
                         <div class="breadcrumb__option">
                             <a href="./index.html">Home</a>
-                            <span>Shopping Cart</span>
+                            <span>Checkout</span>
                         </div>
                     </div>
                 </div>
@@ -243,106 +297,147 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Shoping Cart Section Begin -->
-    <?php if ($carts !== null && !empty($carts)): ?>
-    <form action="checkout.php" method="post" id="checkoutForm">
-    <section class="shoping-cart spad">
+    <!-- Checkout Section Begin -->
+    <section class="checkout spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="shoping__cart__table">
-                            <table id="cartTable">
-                                <thead>
-                                    <tr>
-                                        <th class="shoping__product">Items</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Total</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($carts as $index => $cartItem): ?>
-                                        <?php $itemQty = viewStockItems($cartItem['item_id']); ?>
-                                        <tr>
-                                            <td class="shoping__cart__item">
-                                                <h5><?= $cartItem['item_name'] ?></h5>
-                                            </td>
-                                            <td class="shoping__cart__quantity">
-                                                <div class="quantity">
-                                                    <div class="pro-qty">
-                                                        <input type="number" name="qty[<?= $index ?>]" min="1" max="<?= $itemQty ?>" value="<?= $cartItem['qty'] ?>" class="qty-input" data-price="<?= $cartItem['price'] ?>">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="shoping__cart__price">
-                                                <input type="hidden" name="price[<?= $index ?>]" value="<?= $cartItem['price'] ?>">
-                                                <?= $cartItem['price'] ?>
-                                            </td>
-                                            <td class="shoping__cart__total">
-                                                 <span class="total-amount"><?= $cartItem['qty'] * $cartItem['price'] ?></span>
-                                            </td>
-                                            <td class="shoping__cart__item__close">
-                                                    <input type="hidden" name="stock_id[<?= $index ?>]" value="<?= $cartItem['item_id'] ?>">
-                                                    <input type="hidden" name="item_id" value="<?= $cartItem['item_id'] ?>">
-                                                    <button type="submit" name="delete_item" class="btn btn-danger" value="<?= $cartItem['item_id'] ?>">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                            <input type="hidden" name="product_id" value="<?= $cartItem['product_id'] ?>">
-                            <input type="hidden" name="customer_name" value="<?= $customerID['fullname'] ?>">
-                            <input type="hidden" name="total" id="hiddenTotal" value="">
-                            <!-- <button type="submit" name="checkout" class="checkout-button">
-                                Checkout All Items
-                            </button> -->
-                       
-                    </div>
+                    <h6><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click here</a> to enter your code
+                    </h6>
                 </div>
             </div>
+            <div class="checkout__form">
+                <h4>Billing Details</h4>
+                <form action="#" method="post">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Fist Name<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Last Name<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Country<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input">
+                                <p>Address<span>*</span></p>
+                                <input type="text" placeholder="Street Address" class="checkout__input__add">
+                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
+                            </div>
+                            <div class="checkout__input">
+                                <p>Town/City<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input">
+                                <p>Country/State<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input">
+                                <p>Postcode / ZIP<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Phone<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Email<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__input__checkbox">
+                                <label for="acc">
+                                    Create an account?
+                                    <input type="checkbox" id="acc">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <p>Create an account by entering the information below. If you are a returning customer
+                                please login at the top of the page</p>
+                            <div class="checkout__input">
+                                <p>Account Password<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input__checkbox">
+                                <label for="diff-acc">
+                                    Ship to a different address?
+                                    <input type="checkbox" id="diff-acc">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Order notes<span>*</span></p>
+                                <input type="text"
+                                    placeholder="Notes about your order, e.g. special notes for delivery.">
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="checkout__order">
+                                <h4>Your Order</h4>
+                                <div class="checkout__order__products">Products <span>Price</span></div>
+                                <ul>
+                                <?php
+                                    $subtotal = 0; // Initialize subtotal outside the loop
+                                    foreach ($items as $index => $item) :
+                                        // Retrieve the quantity for the current item
+                                        $quantity = $qtys[$index];
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="shoping__cart__btns">
-                        <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                        <a href="#" class="primary-btn cart-btn cart-btn-right" id="updateCartBtn">
-                            <span class="icon_loading"></span> Update Cart
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="shoping__continue">
-                        <div class="shoping__discount">
-                            <h5>Discount Codes</h5>
-                            <form action="#">
-                                <input type="text" placeholder="Enter your coupon code">
-                                <button type="submit" class="site-btn">APPLY COUPON</button>
-                            </form>
+                                        // Calculate the total price for the current item
+                                        $totalPrice = $quantity * $item['price'];
+                                        $subtotal += $totalPrice; // Add to the subtotal
+                                    ?>
+                                        <li><?= $item['item_name'] ?> (Qty: <?= $quantity ?>)<span><?= number_format($totalPrice, 2) ?></span></li>
+                                <?php endforeach; ?>
+                                </ul>
+                                <div class="checkout__order__subtotal">Subtotal <span> ₱ <?= number_format($total, 2) ?></span></div>
+                                <div class="checkout__order__total">Total <span> ₱ <?= number_format($total, 2) ?></span></div>
+                                <div class="checkout__input__checkbox">
+                                    <label for="acc-or">
+                                        Create an account?
+                                        <input type="checkbox" id="acc-or">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
+                                    ut labore et dolore magna aliqua.</p>
+                                <div class="checkout__input__checkbox">
+                                    <label for="payment">
+                                        Check Payment
+                                        <input type="checkbox" id="payment">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="checkout__input__checkbox">
+                                    <label for="paypal">
+                                        Paypal
+                                        <input type="checkbox" id="paypal">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <button type="submit" name="place_order" class="site-btn">PLACE ORDER</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="shoping__checkout">
-                        <h5>Cart Total</h5>
-                        <ul id="cartTotalList">
-                            <li>Subtotal <span id="subtotalAmount">₱ 0.00</span></li>
-                            <li>Total <span id="cartTotal">₱ 0.00</span></li>
-                        </ul>
-                        <button type="submit" name="submit" style="border: none; width: 100%;" class="primary-btn">PROCEED TO CHECKOUT</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
-        </form>
     </section>
-    <!-- Shoping Cart Section End -->
-    <?php else : ?>
-        <p>Your cart is empty</p>
-    <?php endif; ?>
-
+    <!-- Checkout Section End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer spad">
@@ -418,80 +513,6 @@
     </footer>
     <!-- Footer Section End -->
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Add an event listener for input changes to recalculate total
-        document.querySelectorAll('.qty-input').forEach(function (input) {
-            input.addEventListener('input', function () {
-                updateCartItemTotal(input);
-            });
-        });
-
-        // Add an event listener for the update cart button
-        document.getElementById('updateCartBtn').addEventListener('click', function () {
-            updateCartTotal();
-        });
-
-        // Calculate initial values when the page loads
-        calculateInitialValues();
-
-        // Add an event listener for form submission
-        const form = document.getElementById('checkoutForm');
-        form.addEventListener('submit', function () {
-            // Update the hidden input with the total value
-            const cartTotalElement = document.getElementById('cartTotal');
-            const total = parseFloat(cartTotalElement.textContent.replace('₱ ', '')).toFixed(2);
-
-            // Set the hidden input value
-            document.getElementById('hiddenTotal').value = total;
-        });
-    });
-
-    function updateCartItemTotal(input) {
-        const price = parseFloat(input.getAttribute('data-price'));
-        const quantity = parseInt(input.value);
-
-        if (!isNaN(quantity) && quantity >= 1) {
-            const totalAmount = quantity * price;
-            input.closest('tr').querySelector('.total-amount').textContent = '₱ ' + totalAmount.toFixed(2);
-            updateCartTotal();
-        } else {
-            alert('Please enter a valid quantity.');
-        }
-    }
-
-    function calculateInitialValues() {
-        const totalElements = document.querySelectorAll('.total-amount');
-        let subtotal = 0;
-
-        totalElements.forEach(function (element) {
-            subtotal += parseFloat(element.textContent.replace('₱ ', ''));
-        });
-
-        const subtotalElement = document.getElementById('subtotalAmount');
-        const cartTotalElement = document.getElementById('cartTotal');
-
-        subtotalElement.textContent = '₱ ' + subtotal.toFixed(2);
-        cartTotalElement.textContent = '₱ ' + subtotal.toFixed(2);
-    }
-
-    function updateCartTotal() {
-        const totalElements = document.querySelectorAll('.total-amount');
-        let subtotal = 0;
-
-        totalElements.forEach(function (element) {
-            subtotal += parseFloat(element.textContent.replace('₱ ', ''));
-        });
-
-        const subtotalElement = document.getElementById('subtotalAmount');
-        const cartTotalElement = document.getElementById('cartTotal');
-
-        subtotalElement.textContent = '₱ ' + subtotal.toFixed(2);
-        cartTotalElement.textContent = '₱ ' + subtotal.toFixed(2);
-    }
-</script>
-
-
     <!-- Js Plugins -->
     <script src="javascript/jquery-3.3.1.min.js"></script>
     <script src="javascript/bootstrap.min.js"></script>
@@ -501,6 +522,7 @@
     <script src="javascript/mixitup.min.js"></script>
     <script src="javascript/owl.carousel.min.js"></script>
     <script src="javascript/main.js"></script>
+
 
 
 </body>

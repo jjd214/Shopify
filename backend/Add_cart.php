@@ -74,32 +74,37 @@ class Add_cart extends Config {
         header("Location: ".$_SERVER['HTTP_REFERER']);
     }
 
-    public function deductQtyItem($qty, $itemid) {
+    public function deductQtyItem($qtys, $stock_ids) {
         $connection = $this->openConnection();
     
-        // Check if $qty is an array, and if so, use the first element
-        if (is_array($qty)) {
-            $qty = reset($qty);
-        }
+        foreach ($stock_ids as $index => $stock_id) {
+            // Check if $qtys is an array, and if so, use the corresponding element
+            $qty = is_array($qtys) ? $qtys[$index] : $qtys;
     
-        $stmtDeduct = $connection->prepare("UPDATE `productItems_tbl` SET `qty` = `qty` - ? WHERE `id` = ?");
-        $stmtDeduct->execute([$qty, $itemid]);
+            $stmtDeduct = $connection->prepare("UPDATE `productItems_tbl` SET `qty` = `qty` - ? WHERE `id` = ?");
+            $stmtDeduct->execute([$qty, $stock_id]);
     
-        // Check if the update was successful
-        $rowsAffected = $stmtDeduct->rowCount();
-        if ($rowsAffected <= 0) {
-            echo "Error updating quantity in stock_tbl.";
-            return; // Exit the function if the update fails
+            // Check if the update was successful
+            $rowsAffected = $stmtDeduct->rowCount();
+            if ($rowsAffected <= 0) {
+                echo "Error updating quantity in stock_tbl.";
+                return; // Exit the function if the update fails
+            }
         }
     }
-
-    public function deleteItem($itemid) {
+    
+    public function deleteItem($item_ids) {
         $connection = $this->openConnection();
-        $stmt = $connection->prepare("DELETE FROM `cart_tbl` WHERE `item_id` = ?");
-        $stmt->execute([$itemid]);
-
-        header("Location: ".$_SERVER['HTTP_REFERER']);
+    
+        foreach ($item_ids as $item_id) {
+            $stmt = $connection->prepare("DELETE FROM `cart_tbl` WHERE `item_id` = ?");
+            $stmt->execute([$item_id]);
+        }
+    
+        // Redirect to the previous page
+        header("Location: shoping-cart.php");
     }
+    
 }
 
 ?>

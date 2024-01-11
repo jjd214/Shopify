@@ -233,4 +233,11 @@ function viewRelatedProducts($id) {
     return $products;
 }
 
+function viewCheckOutItems($item_id) {
+    $view = new View();
+    $items = $view->viewCheckOutItems($item_id);
+
+    return $items;
+}
+
 ?>
