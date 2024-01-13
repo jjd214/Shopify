@@ -168,13 +168,9 @@ class View extends Config {
     }
 
     public function viewCheckOutItems($item_ids) {
-        // Uncomment this line to see the array
-        // print_r($item_ids);
-    
         $placeholders = str_repeat('?,', count($item_ids) - 1) . '?';
         $sql = "SELECT * FROM `cart_tbl` WHERE `item_id` IN ($placeholders)";
         
-        // Assuming $this->openConnection() returns the database connection
         $connection = $this->openConnection();
         $stmt = $connection->prepare($sql);
         $stmt->execute($item_ids);

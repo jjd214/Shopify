@@ -24,9 +24,20 @@ class Add_new_product extends Config {
                 $result = $stmt->rowCount();
     
                 if($result > 0) {
-                    echo 'Product Added';
+                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                Product Added.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>';
                 } else {
-                    echo 'Product add failed';
+                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Added Failed.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+
                 }
 
             }
