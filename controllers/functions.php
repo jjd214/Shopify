@@ -240,4 +240,11 @@ function viewCheckOutItems($item_id) {
     return $items;
 }
 
+function viewRandomStores() {
+    $view = new View();
+    $stores = $view->viewRandomStores();
+
+    return $stores;
+}
+
 ?>

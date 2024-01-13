@@ -243,9 +243,22 @@ class View extends Config {
     
         // Fetch the total expected revenue
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         return $result['expected_revenue'];
     }
+    
+    public function viewRandomStores() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM user_tbl ORDER BY RAND()");
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
+    
+    
+
+    
     
     
     

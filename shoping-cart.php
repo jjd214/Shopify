@@ -2,6 +2,7 @@
 
 <?php $customerID = userDetails(); ?>
 <?php $carts = viewCartItems($customerID['id']); ?>
+<?php $randomStores = viewRandomStores(); ?>
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -58,7 +59,7 @@
                 </ul>
             </div>
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
+                <a href="#"><i class="fa fa-user"></i><?= $customerID['fullname'] ?></a>
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
@@ -124,7 +125,7 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                <a href="#"><i class="fa fa-user"></i><?= $customerID['fullname'] ?></a>
                             </div>
                         </div>
                     </div>
@@ -180,20 +181,12 @@
                     <div class="hero__categories">
                         <div class="hero__categories__all">
                             <i class="fa fa-bars"></i>
-                            <span>All departments</span>
+                            <span>Stores</span>
                         </div>
                         <ul>
-                            <li><a href="#">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
-                            <li><a href="#">Fastfood</a></li>
-                            <li><a href="#">Fresh Onion</a></li>
-                            <li><a href="#">Papayaya & Crisps</a></li>
-                            <li><a href="#">Oatmeal</a></li>
-                            <li><a href="#">Fresh Bananas</a></li>
+                            <?php foreach($randomStores as $stores) : ?>
+                            <li><a href="store_details.php?storeid=<?= $stores['id']; ?>"><?= $stores['storename'] ?></a></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>

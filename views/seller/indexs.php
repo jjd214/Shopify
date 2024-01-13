@@ -5,6 +5,10 @@ $sellerName = "John Jacob Dimaya";
 $view = new View();
 $view->getTotalSales($sellerName);
 
+
+$store = $view->getStoreWithMostSales();
+
+echo $store;
 ?>
 
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/partials/__header.php'); ?>

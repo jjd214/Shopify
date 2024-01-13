@@ -15,6 +15,7 @@ if($sellerDetails['fullname'] == null) {
   $expectedRevenue = $view->viewExpectedRevenue($sellerDetails['fullname']);
 
   $increaseSinceYesterday = $view->getTotalRevenueSinceYesterday($sellerDetails['fullname']);
+
 }
 ?>
 
