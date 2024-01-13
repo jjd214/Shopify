@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 07, 2024 at 11:01 AM
+-- Generation Time: Jan 13, 2024 at 05:18 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -33,7 +33,7 @@ CREATE TABLE `cart_tbl` (
   `item_id` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL,
   `item_name` varchar(255) DEFAULT NULL,
-  `qty` bigint(20) DEFAULT NULL,
+  `qty` bigint(20) DEFAULT 1,
   `price` bigint(20) DEFAULT NULL,
   `added_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -43,7 +43,7 @@ CREATE TABLE `cart_tbl` (
 --
 
 INSERT INTO `cart_tbl` (`id`, `user_id`, `item_id`, `product_id`, `item_name`, `qty`, `price`, `added_at`) VALUES
-(16, 44, 17, 7, 'Apple', 10, 20, '2024-01-07 12:51:53');
+(37, 43, 20, 7, 'Grapes', 1, 200, '2024-01-11 13:43:00');
 
 -- --------------------------------------------------------
 
@@ -82,21 +82,14 @@ CREATE TABLE `productitems_tbl` (
 --
 
 INSERT INTO `productitems_tbl` (`id`, `product_id`, `product_image`, `description`, `qty`, `price`, `vendor_name`, `batch_number`, `added_at`, `added_by`) VALUES
-(2, 2, NULL, NULL, 5, '50', 'Fuji sApple', NULL, '2023-12-12 11:35:58', 'John Jacob Dimaya'),
-(4, 3, NULL, NULL, 20, '50', 'Green Apple', 'x1sfcB', '2023-12-12 14:08:24', 'John Jacob Dimaya'),
-(5, 2, NULL, NULL, 1, '50', 'Green Apple', 'x1sfcs', '2023-12-12 14:27:15', 'John Jacob Dimaya'),
-(6, 3, NULL, NULL, 20, '350', '6 Piece Chicken', 'HY2DLO', '2023-12-12 14:39:04', 'John Jacob Dimaya'),
-(7, 2, NULL, NULL, 50, '35', 'Apple Juice', 'KD3ZL9', '2023-12-12 14:48:09', 'John Jacob Dimaya'),
-(8, 3, NULL, NULL, 15, '3000', 'A3 Wagyu', '7V9T4F', '2023-12-12 14:54:05', 'John Jacob Dimaya'),
-(9, 3, NULL, NULL, 10, '200', 'Chicken Thighs', 'BHC2CF', '2023-12-12 14:57:49', 'John Jacob Dimaya'),
-(11, 6, NULL, NULL, 10, '250', 'Korean quality sweatshirts', 'VRO8XV', '2024-01-06 16:44:41', 'Jancis  Discarga'),
-(12, 6, NULL, NULL, 10, '50', 'Korean quality sweatshirts with Hoodie', 'FG5Y9Q', '2024-01-06 16:47:30', 'Jancis  Discarga'),
-(13, 3, 'IMG-3-2024-01-06-05-23-03-PM.jpg', NULL, 0, '300', 'Chinese Collar SweatShirt', 'GA98N6', '2024-01-06 17:23:03', 'Jancis  Discarga'),
-(14, 5, 'IMG-5-2024-01-06-11-01-58-PM.jpg', NULL, 0, '15', 'Zesto Apple', 'LFEXEV', '2024-01-06 23:01:58', 'Jancis  Discarga'),
-(15, 8, 'IMG-8-2024-01-07-12-30-36-PM.jpg', 'High quality maong pants for womens.', 40, '250', 'Otaku Pants', '6ZXNR8', '2024-01-07 12:30:36', 'John Jacob Dimaya'),
-(16, 8, 'IMG-8-2024-01-07-12-35-47-PM.jpg', 'Baggy Pants', 0, '350', 'Curduroy Pants', 'E06YJS', '2024-01-07 12:35:47', 'John Jacob Dimaya'),
-(17, 7, 'IMG-7-2024-01-07-12-37-57-PM.jpeg', 'Fresh Apples', 90, '20', 'Apple', '30WHU4', '2024-01-07 12:37:57', 'John Jacob Dimaya'),
-(18, 8, 'IMG-8-2024-01-07-01-02-43-PM.jpg', 'High Quality Pants', 50, '280', 'Denim Pants', '0JK4UX', '2024-01-07 13:02:43', 'John Jacob Dimaya');
+(19, 7, 'IMG-7-2024-01-07-06-10-48-PM.jpg', 'Fresh Senorita, 1 Quantity, 1 Kilo. ', 95, '50', 'Banana', 'QSGF7G', '2024-01-07 18:10:48', 'John Jacob Dimaya'),
+(20, 7, 'IMG-7-2024-01-07-06-12-32-PM.jpg', 'Kyoho Grapes, 1 Quantity 1 Kilo.', 48, '200', 'Grapes', 'S7FFML', '2024-01-07 18:12:32', 'John Jacob Dimaya'),
+(21, 7, 'IMG-7-2024-01-07-06-17-13-PM.jpg', 'Sweet Indian Mango, 1 Quantity 1 Kilo.', 64, '70', 'Mango', 'VCSJ5W', '2024-01-07 18:17:13', 'John Jacob Dimaya'),
+(22, 7, 'IMG-7-2024-01-07-06-21-35-PM.jpg', 'Fresh WaterMelon', 15, '90', 'WaterMelon', 'TZ7FTR', '2024-01-07 18:21:35', 'John Jacob Dimaya'),
+(23, 7, 'IMG-7-2024-01-07-06-56-25-PM.jpg', 'Apple 1 Quantity, 1 Kilo', 90, '153', 'Apple', '3EQ1K8', '2024-01-07 18:56:25', 'John Jacob Dimaya'),
+(24, 9, 'IMG-9-2024-01-07-07-02-00-PM.jpg', 'Meat Per Kilo', 98, '180', 'Pork Meat', 'IH005F', '2024-01-07 19:02:00', 'John Jacob Dimaya'),
+(25, 10, 'IMG-10-2024-01-07-10-43-35-PM.png', 'Kang kong chips', 35, '100', 'KKK Original', 'PAQ1YN', '2024-01-07 22:43:35', 'Patrick John Fajaro'),
+(26, 11, 'IMG-11-2024-01-13-11-45-22-AM.jpg', 'Alfonso Platinum is a full golden colour, clear and bright, with hints of fruits, ginger and honey and with a soft and good length grape wine spirit finish. Outstanding in mixed drinks, it is also excellent in a snifter or in a glass with abundant ice.', 50, '500', 'Alfonso Platinum', '693X4H', '2024-01-13 11:45:22', 'John Jacob Dimaya');
 
 -- --------------------------------------------------------
 
@@ -119,13 +112,10 @@ CREATE TABLE `products_tbl` (
 --
 
 INSERT INTO `products_tbl` (`id`, `product_name`, `product_type`, `description`, `min_stock`, `added_by`, `date_added`) VALUES
-(2, 'Apple', 'Food', 'lorem ipsum', 5, NULL, '2023-12-12 10:40:49'),
-(3, 'A5 Wagyu Meat', 'Food', 'Most expensive meat', 5, NULL, '2023-12-12 11:39:15'),
-(4, 'Shirt', 'Clothing', 'Otaku ', 100, NULL, '2023-12-14 15:35:27'),
-(5, 'Juice', 'Food', 'qweasdasd', 100, NULL, '2024-01-03 17:19:55'),
-(6, 'Sweat Shirts', 'Clothing', 'lorem ipsum', 100, NULL, '2024-01-06 16:43:28'),
 (7, 'Fruits', 'Food', 'Healthy Fruits', 100, 'John Jacob Dimaya', '2024-01-07 12:16:41'),
-(8, 'Pants', 'Clothing', 'High Quality Pants', 50, 'John Jacob Dimaya', '2024-01-07 12:21:41');
+(9, 'Fresh Meat', 'Food', 'High Quality Meats', 300, 'John Jacob Dimaya', '2024-01-07 19:00:53'),
+(10, 'Chips', 'Food', 'Crispy Chips', 200, 'Patrick John Fajaro', '2024-01-07 22:40:42'),
+(11, 'Drinks', 'Food', 'Alcoholic Drinks', 250, 'John Jacob Dimaya', '2024-01-13 10:23:56');
 
 -- --------------------------------------------------------
 
@@ -171,7 +161,35 @@ INSERT INTO `sales_tbl` (`id`, `product_id`, `stocks_id`, `brand_name`, `qty`, `
 (46, 8, 16, 'Curduroy Pants', 5, '350', 'Johna Grace Doctora', '2024-01-07 12:49:55'),
 (47, 8, 16, 'Curduroy Pants', 5, '350', 'Johna Grace Doctora', '2024-01-07 12:50:45'),
 (48, 7, 16, 'Curduroy Pants', 5, '350', 'Johna Grace Doctora', '2024-01-07 12:52:00'),
-(49, 7, 17, 'Apple', 10, '20', 'Johna Grace Doctora', '2024-01-07 12:52:00');
+(49, 7, 17, 'Apple', 10, '20', 'Johna Grace Doctora', '2024-01-07 12:52:00'),
+(50, 10, 25, 'KKK Original', 5, '100', 'John Jacob Dimaya', '2024-01-08 21:30:33'),
+(51, 7, 25, 'KKK Original', 1, '100', 'John Jacob Dimaya', '2024-01-09 18:48:42'),
+(52, 7, 19, 'Banana', 1, '50', 'John Jacob Dimaya', '2024-01-09 18:48:42'),
+(53, 7, 22, 'WaterMelon', 1, '90', 'John Jacob Dimaya', '2024-01-09 18:48:42'),
+(54, 7, 19, 'Banana', 1, '50', 'Marco Jerome  Gador', '2024-01-09 18:55:12'),
+(55, 7, 20, 'Grapes', 1, '200', 'Marco Jerome  Gador', '2024-01-09 18:55:13'),
+(56, 7, 24, 'Pork Meat', 1, '180', 'Marco Jerome  Gador', '2024-01-09 18:55:13'),
+(57, 7, 22, 'WaterMelon', 1, '90', 'Marco Jerome  Gador', '2024-01-09 18:55:13'),
+(58, 7, 21, 'Mango', 1, '70', 'Marco Jerome  Gador', '2024-01-09 18:55:13'),
+(59, 9, 24, 'Pork Meat', 1, '180', 'Marco Jerome  Gador', '2024-01-09 18:56:56'),
+(60, 10, 25, 'KKK Original', 1, '100', 'John Jacob Dimaya', '2024-01-10 22:02:28'),
+(61, 7, 22, 'WaterMelon', 1, '90', 'John Jacob Dimaya', '2024-01-11 11:27:45'),
+(62, 7, 19, 'Banana', 1, '50', 'John Jacob Dimaya', '2024-01-11 11:33:38'),
+(63, 7, 20, 'Grapes', 1, '200', 'John Jacob Dimaya', '2024-01-11 11:33:38'),
+(64, 10, 19, 'Banana', 1, '50', 'John Jacob Dimaya', '2024-01-11 11:40:14'),
+(65, 10, 25, 'KKK Original', 5, '100', 'John Jacob Dimaya', '2024-01-11 11:40:14'),
+(66, 7, 21, 'Mango', 2, '70', 'John Jacob Dimaya', '2024-01-11 13:31:34'),
+(67, 7, 23, 'Apple', 2, '153', 'John Jacob Dimaya', '2024-01-11 13:31:34'),
+(68, 7, 21, 'Mango', 1, '70', 'John Jacob Dimaya', '2024-01-11 13:32:25'),
+(69, 7, 23, 'Apple', 1, '153', 'John Jacob Dimaya', '2024-01-11 13:32:25'),
+(70, 7, 21, 'Mango', 1, '70', 'John Jacob Dimaya', '2024-01-11 13:34:48'),
+(71, 7, 23, 'Apple', 5, '153', 'John Jacob Dimaya', '2024-01-11 13:34:49'),
+(72, 10, 21, 'Mango', 3, '70', 'John Jacob Dimaya', '2024-01-11 13:39:17'),
+(73, 10, 23, 'Apple', 5, '153', 'John Jacob Dimaya', '2024-01-11 13:39:17'),
+(74, 10, 25, 'KKK Original', 3, '100', 'John Jacob Dimaya', '2024-01-11 13:39:17'),
+(75, 7, 21, 'Mango', 1, '70', 'Marco Jerome  Gador', '2024-01-11 13:44:22'),
+(76, 7, 19, 'Banana', 1, '50', 'Marco Jerome  Gador', '2024-01-11 13:44:22'),
+(77, 7, 22, 'WaterMelon', 2, '90', 'Marco Jerome  Gador', '2024-01-11 13:44:22');
 
 -- --------------------------------------------------------
 
@@ -189,6 +207,8 @@ CREATE TABLE `user_tbl` (
   `verify_token` varchar(100) NOT NULL,
   `account_type` varchar(100) NOT NULL,
   `access` varchar(100) NOT NULL DEFAULT 'user',
+  `image` text DEFAULT NULL,
+  `storename` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -196,9 +216,10 @@ CREATE TABLE `user_tbl` (
 -- Dumping data for table `user_tbl`
 --
 
-INSERT INTO `user_tbl` (`id`, `firstname`, `lastname`, `middlename`, `email`, `password`, `verify_token`, `account_type`, `access`, `created_at`) VALUES
-(43, 'John Jacob', 'Dimaya', 'Ruiz', 'johnjacobdimaya0@gmail.com', '817b3ae38cbe924db0ba853912232d9b', '5e0b5f1227045dd39a6a06ed50ed393b', 'business', 'seller', '2024-01-07 03:54:40'),
-(44, 'Johna Grace', 'Doctora', 'Doctowra', 'johnjacobdimaya2021@gmail.com', '817b3ae38cbe924db0ba853912232d9b', 'd1b8e18e4ba7728b2b944a32a1830716', 'personal', 'customer', '2024-01-07 04:44:07');
+INSERT INTO `user_tbl` (`id`, `firstname`, `lastname`, `middlename`, `email`, `password`, `verify_token`, `account_type`, `access`, `image`, `storename`, `created_at`) VALUES
+(43, 'John Jacob', 'Dimaya', 'Ruiz', 'johnjacobdimaya0@gmail.com', '817b3ae38cbe924db0ba853912232d9b', '5e0b5f1227045dd39a6a06ed50ed393b', 'business', 'seller', 'IMG-43-2024-01-07-09-01-55-PM.png', 'Daddas', '2024-01-07 13:13:17'),
+(45, 'Patrick John', 'Fajaro', 'Farado', 'johnjacobdimaya2022@gmail.com', '817b3ae38cbe924db0ba853912232d9b', 'f645ce0bf3c9539c2c0f590c8537391f', 'business', 'seller', 'IMG-45-2024-01-07-10-48-17-PM.png', 'KKK', '2024-01-08 13:42:59'),
+(46, 'Marco Jerome ', 'Gador', 'Faker', 'johnjacobdimaya2021@gmail.com', '817b3ae38cbe924db0ba853912232d9b', '54a3bcc1ab76e2125a4c3426c3ab80e3', 'personal', 'customer', NULL, NULL, '2024-01-08 13:45:09');
 
 --
 -- Indexes for dumped tables
@@ -225,7 +246,7 @@ ALTER TABLE `members_tbl`
 --
 ALTER TABLE `productitems_tbl`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `product_id` (`product_id`);
+  ADD KEY `productitems_tbl_ibfk_1` (`product_id`);
 
 --
 -- Indexes for table `products_tbl`
@@ -255,7 +276,7 @@ ALTER TABLE `user_tbl`
 -- AUTO_INCREMENT for table `cart_tbl`
 --
 ALTER TABLE `cart_tbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `members_tbl`
@@ -267,25 +288,25 @@ ALTER TABLE `members_tbl`
 -- AUTO_INCREMENT for table `productitems_tbl`
 --
 ALTER TABLE `productitems_tbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `products_tbl`
 --
 ALTER TABLE `products_tbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `sales_tbl`
 --
 ALTER TABLE `sales_tbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `user_tbl`
 --
 ALTER TABLE `user_tbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- Constraints for dumped tables
@@ -296,8 +317,7 @@ ALTER TABLE `user_tbl`
 --
 ALTER TABLE `cart_tbl`
   ADD CONSTRAINT `cart_tbl_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cart_tbl_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cart_tbl_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `productitems_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `cart_tbl_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `members_tbl`
@@ -309,13 +329,7 @@ ALTER TABLE `members_tbl`
 -- Constraints for table `productitems_tbl`
 --
 ALTER TABLE `productitems_tbl`
-  ADD CONSTRAINT `productitems_tbl_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `sales_tbl`
---
-ALTER TABLE `sales_tbl`
-  ADD CONSTRAINT `sales_tbl_ibfk_1` FOREIGN KEY (`stocks_id`) REFERENCES `productitems_tbl` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `productitems_tbl_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products_tbl` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
