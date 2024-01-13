@@ -8,6 +8,11 @@ if (!$access) {
 }
 
 $user = $access;
+
+if($user['access'] == 'seller') {
+    header("Location: /e-commerce/views/seller/index.php");
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="zxx">

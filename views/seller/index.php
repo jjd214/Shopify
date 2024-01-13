@@ -1,5 +1,24 @@
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
 
+<?php $sellerDetails = userDetails(); ?>
+
+<?php
+
+if($sellerDetails['fullname'] == null) {
+  header("Location: /e-commerce/signin.php");
+} else if ($sellerDetails['access'] == 'customer') {
+  header("Location: /e-commerce/index.php");
+} else {
+
+  $view = new View();
+  $totalRevenue = $view->getTotalSales($sellerDetails['fullname']);
+  $expectedRevenue = $view->viewExpectedRevenue($sellerDetails['fullname']);
+
+  $increaseSinceYesterday = $view->getTotalRevenueSinceYesterday($sellerDetails['fullname']);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -46,65 +65,13 @@
             </form>
           </div>
           <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item  dropdown d-none d-md-block">
-              <a class="nav-link dropdown-toggle" id="reportDropdown" href="#" data-toggle="dropdown" aria-expanded="false"> Reports </a>
-              <div class="dropdown-menu navbar-dropdown" aria-labelledby="reportDropdown">
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-file-pdf mr-2"></i>PDF </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-file-excel mr-2"></i>Excel </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-file-word mr-2"></i>doc </a>
-              </div>
-            </li>
-            <li class="nav-item  dropdown d-none d-md-block">
-              <a class="nav-link dropdown-toggle" id="projectDropdown" href="#" data-toggle="dropdown" aria-expanded="false"> Projects </a>
-              <div class="dropdown-menu navbar-dropdown" aria-labelledby="projectDropdown">
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-eye-outline mr-2"></i>View Project </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-pencil-outline mr-2"></i>Edit Project </a>
-              </div>
-            </li>
-            <li class="nav-item nav-language dropdown d-none d-md-block">
-              <a class="nav-link dropdown-toggle" id="languageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                <div class="nav-language-icon">
-                  <i class="flag-icon flag-icon-us" title="us" id="us"></i>
-                </div>
-                <div class="nav-language-text">
-                  <p class="mb-1 text-black">English</p>
-                </div>
-              </a>
-              <div class="dropdown-menu navbar-dropdown" aria-labelledby="languageDropdown">
-                <a class="dropdown-item" href="#">
-                  <div class="nav-language-icon mr-2">
-                    <i class="flag-icon flag-icon-ae" title="ae" id="ae"></i>
-                  </div>
-                  <div class="nav-language-text">
-                    <p class="mb-1 text-black">Arabic</p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                  <div class="nav-language-icon mr-2">
-                    <i class="flag-icon flag-icon-gb" title="GB" id="gb"></i>
-                  </div>
-                  <div class="nav-language-text">
-                    <p class="mb-1 text-black">English</p>
-                  </div>
-                </a>
-              </div>
-            </li>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
                   <img src="assets/images/faces/face28.png" alt="image">
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">Henrys Klein</p>
+                  <p class="mb-1 text-black"><?= $sellerDetails['fullname'] ?></p>
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown dropdown-menu-right p-0 border-0 font-size-sm" aria-labelledby="profileDropdown" data-x-placement="bottom-end">
@@ -282,37 +249,7 @@
                 <span class="menu-title">Charts</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pages/tables/basic-table.html">
-                <span class="icon-bg"><i class="mdi mdi-table-large menu-icon"></i></span>
-                <span class="menu-title">Tables</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-                <span class="icon-bg"><i class="mdi mdi-lock menu-icon"></i></span>
-                <span class="menu-title">User Pages</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="auth">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item documentation-link">
-              <a class="nav-link" href="http://www.bootstrapdash.com/demo/connect-plus-free/jquery/documentation/documentation.html" target="_blank">
-                <span class="icon-bg">
-                  <i class="mdi mdi-file-document-box menu-icon"></i>
-                </span>
-                <span class="menu-title">Documentation</span>
-              </a>
-            </li>
-            <li class="nav-item sidebar-user-actions">
+            <li class="nav-item sidebar-user-actions mt-3">
               <div class="user-details">
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
@@ -321,7 +258,7 @@
                         <img src="assets/images/faces/face28.png" alt="image">
                       </div>
                       <div class="sidebar-profile-text">
-                        <p class="mb-1">Henry Klein</p>
+                        <p class="mb-1"><?= $sellerDetails['fullname'] ?></p>
                       </div>
                     </div>
                   </div>
@@ -354,51 +291,25 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="row" id="proBanner">
-              <div class="col-12">
-                <span class="d-flex align-items-center purchase-popup">
-                  <!-- <p>Like what you see? Check out our premium version for more.</p> -->
-                  <!-- <a href="https://github.com/BootstrapDash/ConnectPlusAdmin-Free-Bootstrap-Admin-Template" target="_blank" class="btn ml-auto download-button">Download Free Version</a>
-                  <a href="http://www.bootstrapdash.com/demo/connect-plus/jquery/template/" target="_blank" class="btn purchase-button">Upgrade To Pro</a> -->
-                  <i class="mdi mdi-close" id="bannerClose"></i>
-                </span>
-              </div>
-            </div>
-            <div class="d-xl-flex justify-content-between align-items-start">
-              <h2 class="text-dark font-weight-bold mb-2"> Overview dashboard </h2>
-              <div class="d-sm-flex justify-content-xl-between align-items-center mb-2">
-                <div class="btn-group bg-white p-3" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-link text-light py-0 border-right">7 Days</button>
-                  <button type="button" class="btn btn-link text-dark py-0 border-right">1 Month</button>
-                  <button type="button" class="btn btn-link text-light py-0">3 Month</button>
+                <div class="col-12">
+                    <span class="d-flex align-items-center purchase-popup">
+                        <p>Welcome, <?= $sellerDetails['fullname'] ?>! Explore your sales and manage your products.</p>
+                        <!-- <a href="https://github.com/BootstrapDash/ConnectPlusAdmin-Free-Bootstrap-Admin-Template" target="_blank" class="btn ml-auto download-button">Download Free Version</a> -->
+                        <!-- <a href="http://www.bootstrapdash.com/demo/connect-plus/jquery/template/" target="_blank" class="btn purchase-button">Upgrade To Pro</a> -->
+                        <i class="mdi mdi-close ml-auto" id="bannerClose"></i>
+                    </span>
                 </div>
-                <div class="dropdown ml-0 ml-md-4 mt-2 mt-lg-0">
-                  <button class="btn bg-white dropdown-toggle p-3 d-flex align-items-center" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-calendar mr-1"></i>24 Mar 2019 - 24 Mar 2019 </button>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton1">
-                    <h6 class="dropdown-header">Settings</h6>
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
-                  </div>
-                </div>
-              </div>
             </div>
+
             <div class="row">
               <div class="col-md-12">
                 <div class="d-sm-flex justify-content-between align-items-center transaparent-tab-border {">
                   <ul class="nav nav-tabs tab-transparent" role="tablist">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                       <a class="nav-link" id="home-tab" data-toggle="tab" href="#" role="tab" aria-selected="true">Users</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                       <a class="nav-link active" id="business-tab" data-toggle="tab" href="#business-1" role="tab" aria-selected="false">Business</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="performance-tab" data-toggle="tab" href="#" role="tab" aria-selected="false">Performance</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="conversion-tab" data-toggle="tab" href="#" role="tab" aria-selected="false">Conversion</a>
                     </li>
                   </ul>
                   <div class="d-md-block d-none">
@@ -431,27 +342,33 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xl-3  col-lg-6 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Impressions</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">100,38</h2>
-                            <div class="dashboard-progress dashboard-progress-3 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-eye icon-md absolute-center text-dark"></i></div>
-                            <p class="mt-4 mb-0">Increased since yesterday</p>
-                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">35%</h3>
+                      <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
+                          <div class="card">
+                              <div class="card-body text-center">
+                                  <h5 class="mb-2 text-dark font-weight-normal">Total Revenue</h5>
+                                  <h2 class="mb-4 text-dark font-weight-bold">₱ <?= $totalRevenue; ?></h2>
+                                  <div class="dashboard-progress dashboard-progress-3 d-flex align-items-center justify-content-center item-parent">
+                                      <!-- Replace mdi-eye with the desired icon class -->
+                                      <i class="mdi mdi-trending-up icon-md absolute-center text-dark"></i>
+                                  </div>
+                                  <p class="mt-4 mb-0">Increased since yesterday</p>
+                                  <h3 class="mb-0 font-weight-bold mt-2 text-dark"><?= $increaseSinceYesterday; ?>%</h3>
+                              </div>
                           </div>
-                        </div>
                       </div>
                       <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Followers</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">4250k</h2>
-                            <div class="dashboard-progress dashboard-progress-4 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-cube icon-md absolute-center text-dark"></i></div>
-                            <p class="mt-4 mb-0">Decreased since yesterday</p>
-                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">25%</h3>
+                          <div class="card">
+                              <div class="card-body text-center">
+                                  <h5 class="mb-2 text-dark font-weight-normal">Expected Revenue</h5>
+                                  <h2 class="mb-4 text-dark font-weight-bold">₱ <?= $expectedRevenue ?></h2>
+                                  <div class="dashboard-progress dashboard-progress-4 d-flex align-items-center justify-content-center item-parent">
+                                      <!-- Replace mdi-cube with the desired icon class -->
+                                      <i class="mdi mdi-currency-usd icon-md absolute-center text-dark"></i>
+                                  </div>
+                                  <p class="mt-4 mb-0">Decreased since yesterday</p>
+                                  <h3 class="mb-0 font-weight-bold mt-2 text-dark">25%</h3>
+                              </div>
                           </div>
-                        </div>
                       </div>
                     </div>
                     <div class="row">

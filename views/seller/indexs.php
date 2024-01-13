@@ -1,4 +1,11 @@
-<?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); 
+
+$sellerName = "John Jacob Dimaya";
+
+$view = new View();
+$view->getTotalSales($sellerName);
+
+?>
 
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/partials/__header.php'); ?>
 

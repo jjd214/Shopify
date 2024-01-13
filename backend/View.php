@@ -179,10 +179,75 @@ class View extends Config {
         return $data;
     }
 
-    public function getTotalSales() {
+    public function getTotalSales($sellerName) {
         $connection = $this->openConnection();
-        $stmt = $connection->prepare("SELECT `added_by` FROM `productItems_tbl` INNER JOIN `sales_tbl` ON productItems_tbl.added_by");
+        $stmt = $connection->prepare("SELECT SUM(sales_tbl.price) AS total_sales
+                                      FROM products_tbl
+                                      INNER JOIN sales_tbl ON products_tbl.id = sales_tbl.product_id
+                                      WHERE products_tbl.added_by = :sellerName");
+        $stmt->bindParam(':sellerName', $sellerName, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        // Fetch the total sales
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        return $result['total_sales'];
     }
+
+    public function getTotalSalesForDate($sellerName, $date) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT SUM(sales_tbl.price) AS total_sales
+                                      FROM products_tbl
+                                      INNER JOIN sales_tbl ON products_tbl.id = sales_tbl.product_id
+                                      WHERE products_tbl.added_by = :sellerName
+                                      AND DATE(sales_tbl.date_purchased) = DATE(:date)");
+        $stmt->bindParam(':sellerName', $sellerName, PDO::PARAM_STR);
+        $stmt->bindParam(':date', $date, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        // Fetch the total sales for the specified date
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        return $result['total_sales'];
+    }
+    
+
+    public function getTotalRevenueSinceYesterday($sellerName) {
+        $today = date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+
+        // Get total sales for today and yesterday
+        $totalSalesToday = $this->getTotalSalesForDate($sellerName, $today);
+        $totalSalesYesterday = $this->getTotalSalesForDate($sellerName, $yesterday);
+
+        // Calculate the percentage increase
+        if ($totalSalesYesterday > 0) {
+            $increasePercentage = (($totalSalesToday - $totalSalesYesterday) / $totalSalesYesterday) * 100;
+        } else {
+            // Handle the case where yesterday's sales are 0 to avoid division by zero
+            $increasePercentage = 100; // Assuming a 100% increase when yesterday's sales are 0
+        }
+
+        return round($increasePercentage, 2);
+    }
+
+    public function viewExpectedRevenue($sellerName) {
+        $connection = $this->openConnection();
+        
+        $stmt = $connection->prepare("SELECT SUM(qty * price) AS expected_revenue
+                                      FROM productItems_tbl
+                                      WHERE added_by = :sellerName");
+        
+        $stmt->bindParam(':sellerName', $sellerName, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        // Fetch the total expected revenue
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        return $result['expected_revenue'];
+    }
+    
+    
     
 }
 
