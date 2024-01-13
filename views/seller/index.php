@@ -245,7 +245,7 @@
           <ul class="nav">
             <li class="nav-item nav-category">Main</li>
             <li class="nav-item">
-              <a class="nav-link" href="index.html">
+              <a class="nav-link" href="index.php">
                 <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
                 <span class="menu-title">Dashboard</span>
               </a>
@@ -265,15 +265,15 @@
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="pages/icons/mdi.html">
+              <a class="nav-link" href="pages/products/product_list.php">
                 <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Icons</span>
+                <span class="menu-title">Products</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="pages/forms/basic_elements.html">
+              <a class="nav-link" href="pages/forms/add_new_product.php">
                 <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-                <span class="menu-title">Forms</span>
+                <span class="menu-title">Add Product</span>
               </a>
             </li>
             <li class="nav-item">

@@ -178,6 +178,11 @@ class View extends Config {
     
         return $data;
     }
+
+    public function getTotalSales() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT `added_by` FROM `productItems_tbl` INNER JOIN `sales_tbl` ON productItems_tbl.added_by");
+    }
     
 }
 
