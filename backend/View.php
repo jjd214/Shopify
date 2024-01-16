@@ -311,10 +311,48 @@ class View extends Config {
         $stmt->execute([$user_id]);
         $result = $stmt->rowCount();
 
+        
+
         if($result == 0) {
             header("Location: my_address.php");
             exit();
         }
+    }
+
+    public function getRandomItems() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `productItems_tbl` ORDER BY RAND() LIMIT 8");
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
+
+    public function viewSellerAccounts() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `user_tbl` WHERE `access` = 'seller'");
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
+
+    public function viewCustomerAccounts() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `user_tbl` WHERE `access` = 'customer'");
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
+
+    public function viewOnSaleProducts() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `products_tbl`");
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+        
+        return $data;
     }
     
 }

@@ -277,4 +277,32 @@ function checkUserIDExist($user_id) {
     $validate = new View();
     $validate->checkUserIDExist($user_id);
 }
+
+function getRandomItems(){
+    $view = new View();
+    $items = $view->getRandomItems();
+
+    return $items;
+}
+
+function viewSellerAccounts() {
+    $view = new View();
+    $accounts = $view->viewSellerAccounts();
+
+    return $accounts;
+}
+
+function viewCustomerAccounts() {
+    $view = new View();
+    $accounts = $view->viewCustomerAccounts();
+
+    return $accounts;
+}
+
+function viewOnSaleProducts() {
+    $view = new View();
+    $products = $view->viewOnSaleProducts();
+
+    return $products;
+}
 ?>

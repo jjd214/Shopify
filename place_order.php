@@ -374,16 +374,16 @@ if (!$access) {
 
                                 <p>Mode of payment</p>
                                 <div class="checkout__input__checkbox">
-                                    <label for="payment">
+                                    <label for="payment_cash">
                                         Cash on delivery
-                                        <input type="checkbox" id="payment">
+                                        <input type="checkbox" id="payment_cash" required>
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="checkout__input__checkbox">
-                                    <label for="paypal">
+                                    <label for="payment_paypal">
                                         Paypal
-                                        <input type="checkbox" id="paypal">
+                                        <input type="checkbox" id="payment_paypal" required>
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>

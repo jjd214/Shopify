@@ -8,6 +8,8 @@ if($sellerDetails['fullname'] == null) {
   header("Location: /e-commerce/signin.php");
 } else if ($sellerDetails['access'] == 'customer') {
   header("Location: /e-commerce/index.php");
+} else if ($sellerDetails['access'] == 'admin') {
+  header("Location: /e-commerce/views/admin/index.php");
 } else {
 
   $view = new View();

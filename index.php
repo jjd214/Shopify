@@ -11,9 +11,11 @@ $user = $access;
 
 if($user['access'] == 'seller') {
     header("Location: /e-commerce/views/seller/index.php");
+} else if ($user['access'] == 'admin') {
+    header("Location: /e-commerce/views/admin/index.php");
+} else {
+    $randomStores = viewRandomStores();
 }
-
-$randomStores = viewRandomStores();
 
 ?>
 <!DOCTYPE html>
