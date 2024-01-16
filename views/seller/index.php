@@ -15,6 +15,8 @@ if($sellerDetails['fullname'] == null) {
   $expectedRevenue = $view->viewExpectedRevenue($sellerDetails['fullname']);
 
   $increaseSinceYesterday = $view->getTotalRevenueSinceYesterday($sellerDetails['fullname']);
+  $totalOrder = viewTotalOrders($sellerDetails['fullname']);
+  $totalItem = viewTotalItem($sellerDetails['fullname']);
 
 }
 ?>
@@ -105,7 +107,7 @@ if($sellerDetails['fullname'] == null) {
                     <span>Lock Account</span>
                     <i class="mdi mdi-lock ml-1"></i>
                   </a>
-                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="/e-commerce/signout.php">
                     <span>Log Out</span>
                     <i class="mdi mdi-logout ml-1"></i>
                   </a>
@@ -218,7 +220,7 @@ if($sellerDetails['fullname'] == null) {
                 <span class="menu-title">Dashboard</span>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
                 <span class="menu-title">UI Elements</span>
@@ -231,7 +233,7 @@ if($sellerDetails['fullname'] == null) {
                   <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
                 </ul>
               </div>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link" href="pages/products/product_list.php">
                 <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
@@ -244,12 +246,12 @@ if($sellerDetails['fullname'] == null) {
                 <span class="menu-title">Add Product</span>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="pages/charts/chartjs.html">
                 <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
                 <span class="menu-title">Charts</span>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item sidebar-user-actions mt-3">
               <div class="user-details">
                 <div class="d-flex justify-content-between align-items-center">
@@ -282,7 +284,7 @@ if($sellerDetails['fullname'] == null) {
             </li>
             <li class="nav-item sidebar-user-actions">
               <div class="sidebar-user-menu">
-                <a href="#" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
+                <a href="/e-commerce/signout.php" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
                   <span class="menu-title">Log Out</span></a>
               </div>
             </li>
@@ -325,18 +327,18 @@ if($sellerDetails['fullname'] == null) {
                         <div class="card">
                           <div class="card-body text-center">
                             <h5 class="mb-2 text-dark font-weight-normal">Orders</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">932.00</h2>
+                            <h2 class="mb-4 text-dark font-weight-bold"><?= $totalOrder['totalOrders'] ?></h2>
                             <div class="dashboard-progress dashboard-progress-1 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-lightbulb icon-md absolute-center text-dark"></i></div>
                             <p class="mt-4 mb-0">Completed</p>
-                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">5443</h3>
+                            <h3 class="mb-0 font-weight-bold mt-2 text-dark"><?= $totalOrder['totalOrders'] ?></h3>
                           </div>
                         </div>
                       </div>
                       <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
                         <div class="card">
                           <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Unique Visitors</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold">756,00</h2>
+                            <h5 class="mb-2 text-dark font-weight-normal">Total Items</h5>
+                            <h2 class="mb-4 text-dark font-weight-bold"><?= $totalItem['TotalItem'] ?></h2>
                             <div class="dashboard-progress dashboard-progress-2 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-account-circle icon-md absolute-center text-dark"></i></div>
                             <p class="mt-4 mb-0">Increased since yesterday</p>
                             <h3 class="mb-0 font-weight-bold mt-2 text-dark">50%</h3>

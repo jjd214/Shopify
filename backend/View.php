@@ -255,11 +255,46 @@ class View extends Config {
 
         return $data;
     }
-    
-    
 
+    public function viewTotalOrders($sellerName) {
+        $connection = $this->openConnection();
     
+        // Count the total orders for the seller
+        $stmtCount = $connection->prepare("SELECT COUNT(*) as totalOrders
+            FROM sales_tbl
+            JOIN products_tbl ON sales_tbl.product_id = products_tbl.id
+            WHERE products_tbl.added_by = ?
+        ");
+        $stmtCount->execute([$sellerName]);
+        $resultCount = $stmtCount->fetch(PDO::FETCH_ASSOC);
+        $totalOrders = $resultCount['totalOrders'];
     
+        // Fetch the detailed order data
+        $stmtOrders = $connection->prepare("SELECT sales_tbl.*, products_tbl.added_by
+            FROM sales_tbl
+            JOIN products_tbl ON sales_tbl.product_id = products_tbl.id
+            WHERE products_tbl.added_by = ?
+        ");
+        $stmtOrders->execute([$sellerName]);
+        $data = $stmtOrders->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Include the total orders count in the result
+        $result = [
+            'totalOrders' => $totalOrders,
+            'orders' => $data,
+        ];
+    
+        return $result;
+    }
+    
+    public function viewTotalItem($sellerName) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT COUNT(*) as TotalItem FROM `productItems_tbl` WHERE `added_by` = ?");
+        $stmt->execute([$sellerName]);
+        $data = $stmt->fetch();
+
+        return $data;
+    }
     
     
 }

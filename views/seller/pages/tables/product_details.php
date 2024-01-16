@@ -13,11 +13,23 @@
     }
 </style>
 
+<?php
+
+$sellerDetails = userDetails();
+
+if($sellerDetails['fullname'] == null) {
+  header("Location: /e-commerce/signin.php");
+} else if ($sellerDetails['access'] == 'customer') {
+  header("Location: /e-commerce/index.php");
+} else {
+
+?>
+
 <?php $sellerDetails = userDetails(); ?>
 <?php $product = productDetails(); ?>
 <?php $stocks = viewAllStocks(); ?>
 <?php $customerName = userDetails(); ?>
-<?php $inventoryArr = array(); ?>
+<?php $inventoryArr = array(); }?>
 
 
 <!DOCTYPE html>
@@ -130,7 +142,7 @@
                 <img src="../../assets/images/faces/face28.png" alt="image">
               </div>
               <div class="nav-profile-text">
-                <p class="mb-1 text-black">Henry Klein</p>
+                <p class="mb-1 text-black"><?= $sellerDetails['fullname'] ?></p>
               </div>
             </a>
             <div class="dropdown-menu navbar-dropdown dropdown-menu-right p-0 border-0 font-size-sm"
@@ -165,7 +177,7 @@
                   <span>Lock Account</span>
                   <i class="mdi mdi-lock ml-1"></i>
                 </a>
-                <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="/e-commerce/signout.php">
                   <span>Log Out</span>
                   <i class="mdi mdi-logout ml-1"></i>
                 </a>
@@ -278,12 +290,12 @@
         <ul class="nav">
           <li class="nav-item nav-category">Main</li>
           <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="../../index.php">
               <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
               <span class="menu-title">UI Elements</span>
@@ -298,7 +310,7 @@
                 </li>
               </ul>
             </div>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="../../pages/products/product_list.php">
               <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
@@ -311,7 +323,7 @@
               <span class="menu-title">Add Product</span>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="../../pages/charts/chartjs.html">
               <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
               <span class="menu-title">Charts</span>
@@ -339,18 +351,8 @@
                 <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-500.html"> 500 </a></li>
               </ul>
             </div>
-          </li>
-          <li class="nav-item documentation-link">
-            <a class="nav-link"
-              href="http://www.bootstrapdash.com/demo/connect-plus-free/jquery/documentation/documentation.html"
-              target="_blank">
-              <span class="icon-bg">
-                <i class="mdi mdi-file-document-box menu-icon"></i>
-              </span>
-              <span class="menu-title">Documentation</span>
-            </a>
-          </li>
-          <li class="nav-item sidebar-user-actions">
+          </li> -->
+          <li class="nav-item sidebar-user-actions mt-3">
             <div class="user-details">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -359,7 +361,7 @@
                       <img src="../../assets/images/faces/face28.png" alt="image">
                     </div>
                     <div class="sidebar-profile-text">
-                      <p class="mb-1">Henry Klein</p>
+                      <p class="mb-1"><?= $sellerDetails['fullname'] ?></p>
                     </div>
                   </div>
                 </div>
@@ -382,7 +384,7 @@
           </li>
           <li class="nav-item sidebar-user-actions">
             <div class="sidebar-user-menu">
-              <a href="#" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
+              <a href="/e-commerce/signout.php" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
                 <span class="menu-title">Log Out</span></a>
             </div>
           </li>

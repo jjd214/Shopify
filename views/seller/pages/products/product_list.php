@@ -149,7 +149,7 @@
                   <span>Lock Account</span>
                   <i class="mdi mdi-lock ml-1"></i>
                 </a>
-                <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
+                <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="/e-commerce/signout.php">
                   <span>Log Out</span>
                   <i class="mdi mdi-logout ml-1"></i>
                 </a>
@@ -267,7 +267,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
               <span class="menu-title">UI Elements</span>
@@ -282,7 +282,7 @@
                 </li>
               </ul>
             </div>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="../../pages/products/product_list.php">
               <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
@@ -295,7 +295,7 @@
               <span class="menu-title">Add Product</span>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="../../pages/charts/chartjs.html">
               <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
               <span class="menu-title">Charts</span>
@@ -312,7 +312,7 @@
               <span class="icon-bg"><i class="mdi mdi-lock menu-icon"></i></span>
               <span class="menu-title">User Pages</span>
               <i class="menu-arrow"></i>
-            </a>
+            </a> -->
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="../../pages/samples/blank-page.html"> Blank Page </a>
@@ -324,17 +324,7 @@
               </ul>
             </div>
           </li>
-          <li class="nav-item documentation-link">
-            <a class="nav-link"
-              href="http://www.bootstrapdash.com/demo/connect-plus-free/jquery/documentation/documentation.html"
-              target="_blank">
-              <span class="icon-bg">
-                <i class="mdi mdi-file-document-box menu-icon"></i>
-              </span>
-              <span class="menu-title">Documentation</span>
-            </a>
-          </li>
-          <li class="nav-item sidebar-user-actions">
+          <li class="nav-item sidebar-user-actions mt-3">
             <div class="user-details">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -366,7 +356,7 @@
           </li>
           <li class="nav-item sidebar-user-actions">
             <div class="sidebar-user-menu">
-              <a href="#" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
+              <a href="/e-commerce/signout.php" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
                 <span class="menu-title">Log Out</span></a>
             </div>
           </li>

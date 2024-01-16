@@ -247,4 +247,18 @@ function viewRandomStores() {
     return $stores;
 }
 
+function viewTotalOrders($sellerName){
+    $view = new View();
+    $total = $view->viewTotalOrders($sellerName);
+
+    return $total;
+}
+
+function viewTotalItem($sellerName){
+    $view = new View();
+    $total = $view->viewTotalItem($sellerName);
+
+    return $total;
+}
+
 ?>
