@@ -32,6 +32,9 @@ if (!$access) {
     $items = viewCheckOutItems($stock_ids);
     
     if(isset($_POST['place_order'])) {
+
+        checkUserIDExist($user['id']);
+
         $deduct = new Add_cart();
         $sales = new Sales(new View());
     
@@ -302,50 +305,50 @@ if (!$access) {
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Fist Name<span>*</span></p>
-                                        <input type="text" value="<?= $details['firstname'] ?>" readonly/>
+                                        <input type="text" value="<?= isset($details['firstname']) ? $details['firstname'] : null ?>" readonly/>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Last Name<span>*</span></p>
-                                        <input type="text" value="<?= $details['lastname'] ?>" readonly>
+                                        <input type="text" value="<?= isset($details['lastname']) ? $details['lastname'] : null ?>" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input">
                                 <p>Country<span>*</span></p>
-                                <input type="text" value="<?= $details['country'] ?>" readonly>
+                                <input type="text" value="<?= isset($details['country']) ? $details['country'] : null ?>" readonly>
                             </div>
                             <div class="checkout__input">
                                 <p>Address<span>*</span></p>
-                                <input type="text" placeholder="Street Address" class="checkout__input__add" value="<?= $details['address'] ?>" readonly>
+                                <input type="text" placeholder="Street Address" class="checkout__input__add" value="<?= isset($details['address']) ? $details['address'] : null ?>" readonly>
                             </div>
                             <div class="checkout__input">
                                 <p>Town/City<span>*</span></p>
-                                <input type="text" value="<?= $details['city'] ?>" readonly>
+                                <input type="text" value="<?= isset($details['city']) ? $details['city'] : null ?>" readonly>
                             </div>
                             <div class="checkout__input">
                                 <p>Postcode / ZIP<span>*</span></p>
-                                <input type="text" value="<?= $details['postcode'] ?>" readonly>
+                                <input type="text" value="<?= isset($details['postcode']) ? $details['postcode'] : null ?>" readonly>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Phone<span>*</span></p>
-                                        <input type="text" value="<?= $details['phoneno'] ?>" readonly>
+                                        <input type="text" value="<?= isset($details['phoneno']) ? $details['phoneno'] : null ?>" readonly>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Email<span>*</span></p>
-                                        <input type="text" value="<?= $details['email'] ?>" readonly>
+                                        <input type="text" value="<?= isset($details['email']) ? $details['email'] : null ?>" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input">
                                 <p>Order notes<span>*</span></p>
                                 <input type="text"
-                                    placeholder="Notes about your order, e.g. special notes for delivery." value="<?= $details['order_notes'] ?>" readonly>
+                                    placeholder="Notes about your order, e.g. special notes for delivery." value="<?= isset($details['order_notes']) ? $details['order_notes'] : null ?>" readonly>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6">

@@ -305,6 +305,17 @@ class View extends Config {
         return $data;
     }
     
+    public function checkUserIDExist($user_id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `billing_tbl` WHERE `user_id` = ?");
+        $stmt->execute([$user_id]);
+        $result = $stmt->rowCount();
+
+        if($result == 0) {
+            header("Location: my_address.php");
+            exit();
+        }
+    }
     
 }
 

@@ -272,4 +272,9 @@ function viewBillingAddress($user_id) {
 
     return $details;
 }
+
+function checkUserIDExist($user_id) {
+    $validate = new View();
+    $validate->checkUserIDExist($user_id);
+}
 ?>
