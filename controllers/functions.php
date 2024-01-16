@@ -261,4 +261,15 @@ function viewTotalItem($sellerName){
     return $total;
 }
 
+function setBillingAddress() {
+    $address = new Account_settings();
+    $address->setBillingAddress();
+}
+
+function viewBillingAddress($user_id) {
+    $view = new View();
+    $details = $view->viewBillingAddress($user_id);
+
+    return $details;
+}
 ?>

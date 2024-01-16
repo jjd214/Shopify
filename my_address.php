@@ -1,3 +1,26 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
+<?php 
+$access = userDetails();
+
+if (!$access) {
+    header("Location: signin.php");
+    exit(); 
+}
+
+$user = $access;
+
+if($user['access'] == 'seller') {
+    header("Location: /e-commerce/views/seller/index.php");
+}
+
+$randomStores = viewRandomStores();
+
+$details = viewBillingAddress($user['id']);
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -53,7 +76,7 @@
                 </ul>
             </div>
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
+                <a href="#"><i class="fa fa-user"></i><?= $user['fullname'] ?></a>
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
@@ -119,7 +142,7 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                <a href="#"><i class="fa fa-user"></i><?= $user['fullname'] ?></a>
                             </div>
                         </div>
                     </div>
@@ -136,18 +159,17 @@
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li class="active"><a href="./shop-grid.html">Shop</a></li>
+                            <li class="active"><a href="./index.php">Home</a></li>
+                            <li><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                                    <li><a href="./checkout.php">Check Out</a></li>
+                                    <li><a href="./my_address.php">My Address</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contact.php">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -240,77 +262,69 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Checkout Section Begin -->
-    <section class="checkout spad" style="width: 100%">
+    <section class="checkout spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h6><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click here</a> to enter your code
-                    </h6>
+                    <h6><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click here</a> to enter your code</h6>
                 </div>
             </div>
-            <div class="checkout__form" style="width: 100%">
+            <div class="checkout__form">
                 <h4>Billing Address</h4>
-                <form action="#" method="post">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8 col-md-6">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Fist Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Last Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Country<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Address<span>*</span></p>
-                                <input type="text" placeholder="Street Address" class="checkout__input__add">
-                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Town/City<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Country/State<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Postcode / ZIP<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Phone<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Email<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Order notes<span>*</span></p>
-                                <input type="text"
-                                    placeholder="Notes about your order, e.g. special notes for delivery.">
-                            </div>
-                            <div class="col-lg-12">
-                                <button type="submit" class="btn btn-primary btn-block checkout__btn">Set Address</button>
+                <?php setBillingAddress(); ?>
+                <form action="" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="firstname">First Name<span>*</span></label>
+                                <input type="text" class="form-control" name="firstname" value="<?= isset($details['firstname']) ? $details['firstname'] : '' ?>" required />
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="lastname">Last Name<span>*</span></label>
+                                <input type="text" class="form-control" name="lastname" value="<?= isset($details['lastname']) ? $details['lastname'] : '' ?>" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country<span>*</span></label>
+                        <input type="text" class="form-control" name="country" value="<?= isset($details['country']) ? $details['country'] : '' ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address<span>*</span></label>
+                        <input type="text" class="form-control" placeholder="Street Address" name="address" value="<?= isset($details['address']) ? $details['address'] : '' ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="city">Town/City<span>*</span></label>
+                        <input type="text" class="form-control" name="city" value="<?= isset($details['city']) ? $details['city'] : '' ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="zipcode">Postcode / ZIP<span>*</span></label>
+                        <input type="text" class="form-control" name="zipcode" value="<?= isset($details['postcode']) ? $details['postcode'] : '' ?>" required />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phoneno">Phone<span>*</span></label>
+                                <input type="number" class="form-control" name="phoneno" value="<?= isset($details['phoneno']) ? $details['phoneno'] : '' ?>" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email<span>*</span></label>
+                                <input type="email" class="form-control" name="email" value="<?= isset($details['email']) ? $details['email'] : '' ?>" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Order notes<span>*</span></label>
+                        <textarea class="form-control" placeholder="Notes about your order, e.g., special notes for delivery." name="notes"><?= isset($details['order_notes']) ? $details['order_notes'] : '' ?></textarea>
+                    </div>
+
+                    <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                    <div class="form-group">
+                        <button type="submit" name="submit" class="btn btn-primary btn-block">Set Address</button>
                     </div>
                 </form>
             </div>

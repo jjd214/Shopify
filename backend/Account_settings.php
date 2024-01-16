@@ -60,5 +60,69 @@ class account_settings extends Config {
             }
         }
     }
+
+    public function setBillingAddress() {
+        if(isset($_POST['submit'])) {
+            $firstname = $_POST['firstname'];
+            $lastname = $_POST['lastname'];
+            $country = $_POST['country'];
+            $address = $_POST['address'];
+            $city = $_POST['city'];
+            $zipcode = $_POST['zipcode'];
+            $phone_number = $_POST['phoneno'];
+            $email = $_POST['email'];
+            $order_notes = $_POST['notes'];
+            $user_id = $_POST['user_id'];
+    
+            $connection = $this->openConnection();
+    
+            // Check if user_id exists
+            $checkStmt = $connection->prepare("SELECT COUNT(*) as count FROM `billing_tbl` WHERE `user_id` = ?");
+            $checkStmt->execute([$user_id]);
+            $rowCount = $checkStmt->fetchColumn();
+    
+            if ($rowCount > 0) {
+                // User_id exists, perform update
+                $stmt = $connection->prepare("UPDATE `billing_tbl` SET `firstname`=?, `lastname`=?, `country`=?, `address`=?, `city`=?, `postcode`=?, `phoneno`=?, `email`=?, `order_notes`=? WHERE `user_id`=?");
+                $stmt->execute([$firstname, $lastname, $country, $address, $city, $zipcode, $phone_number, $email, $order_notes, $user_id]);
+    
+                $result = $stmt->rowCount();
+    
+                if($result > 0) {
+                    echo '<div class="alert alert-info alert-dismissible fade show" role="alert">
+                                Address updated
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                } else {
+                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                Failed to update address.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                }
+            } else {
+                // User_id does not exist, perform insert
+                $stmt = $connection->prepare("INSERT INTO `billing_tbl` (`user_id`, `firstname`, `lastname`, `country`, `address`, `city`, `postcode`, `phoneno`, `email`, `order_notes`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$user_id, $firstname, $lastname, $country, $address, $city, $zipcode, $phone_number, $email, $order_notes]);
+    
+                $result = $stmt->rowCount();
+    
+                if($result > 0) {
+                    echo '<div class="alert alert-info alert-dismissible fade show" role="alert">
+                                Address set
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                } else {
+                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                Failed to set address.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>';
+                }
+            }
+            
+        }
+        
+    }
+    
+    
 }
 ?>

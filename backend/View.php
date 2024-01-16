@@ -295,6 +295,15 @@ class View extends Config {
 
         return $data;
     }
+
+    public function viewBillingAddress($user_id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `billing_tbl` WHERE `user_id` = ?");
+        $stmt->execute([$user_id]);
+        $data = $stmt->fetch();
+
+        return $data;
+    }
     
     
 }
