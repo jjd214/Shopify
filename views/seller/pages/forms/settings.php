@@ -280,6 +280,12 @@
                 <span class="menu-title">Add Product</span>
               </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pages/tables/orders.php">
+                    <span class="icon-bg"><i class="mdi mdi-cart menu-icon"></i></span>
+                    <span class="menu-title">Order</span>
+                </a>
+            </li>
             <li class="nav-item sidebar-user-actions mt-3">
               <div class="user-details">
                 <div class="d-flex justify-content-between align-items-center">
@@ -299,7 +305,7 @@
             </li>
             <li class="nav-item sidebar-user-actions">
               <div class="sidebar-user-menu">
-                <a href="#" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
+                <a href="./settings.php" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
                   <span class="menu-title">Settings</span>
                 </a>
               </div>
@@ -391,6 +397,40 @@
                 </div>
               </div>
             </div>
+            <!-- Second Card -->
+            <div class="row">
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <?php sellerChangePassword(); ?>
+                            <h4 class="card-title">Security Settings</h4>
+
+                            <!-- Form for Security Settings -->
+                            <form action="" method="post" class="forms-sample">
+                                <div class="form-group">
+                                    <label for="old_password">Old Password</label>
+                                    <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Enter Old Password" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="new_password">New Password</label>
+                                    <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter New Password" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="confirm_password">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm New Password" required>
+                                </div>
+
+                                <input type="hidden" name="seller_id" value="<?= $sellerDetails['id'] ?>">
+
+                                <button type="submit" name="security_submit" class="btn btn-primary mr-2">Save Security Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->

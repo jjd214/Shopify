@@ -1,5 +1,5 @@
 <?php
-class account_settings extends Config {
+class Account_settings extends Config {
 
     public function businessSettings() {
         if(isset($_POST['submit'])) {
@@ -12,14 +12,12 @@ class account_settings extends Config {
             
             $connection = $this->openConnection();
             
-            // Check if a new image is selected
             if (!empty($_FILES['image']['name'])) {
                 $img_name = $_FILES['image']['name'];
                 $img_size = $_FILES['image']['size'];
                 $tmp_name = $_FILES['image']['tmp_name'];
                 $error = $_FILES['image']['error'];
     
-                // Check for allowed image types
                 $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
                 $img_ex_lc = strtolower($img_ex);
                 $allowed_exs = array("jpg", "jpeg", "png");
@@ -75,11 +73,10 @@ class account_settings extends Config {
                         </div>';
                 }
             } else {
-                // No new image uploaded, retain the current business image
+
                 $stmt = $connection->prepare("UPDATE `user_tbl` SET `firstname` = ?, `lastname` = ?, `middlename` = ?, `storename` = ? WHERE `id` = ?");
                 $stmt->execute([$firstname, $lastname, $middlename, $storename, $sellerId]);
     
-                // Check if the update was successful
                 $result = $stmt->rowCount();
     
                 if ($result > 0) {
@@ -96,8 +93,6 @@ class account_settings extends Config {
             }
         }
     }
-    
-    
 
     public function setBillingAddress() {
         if(isset($_POST['submit'])) {
@@ -114,13 +109,12 @@ class account_settings extends Config {
     
             $connection = $this->openConnection();
     
-            // Check if user_id exists
             $checkStmt = $connection->prepare("SELECT COUNT(*) as count FROM `billing_tbl` WHERE `user_id` = ?");
             $checkStmt->execute([$user_id]);
             $rowCount = $checkStmt->fetchColumn();
     
             if ($rowCount > 0) {
-                // User_id exists, perform update
+
                 $stmt = $connection->prepare("UPDATE `billing_tbl` SET `firstname`=?, `lastname`=?, `country`=?, `address`=?, `city`=?, `postcode`=?, `phoneno`=?, `email`=?, `order_notes`=? WHERE `user_id`=?");
                 $stmt->execute([$firstname, $lastname, $country, $address, $city, $zipcode, $phone_number, $email, $order_notes, $user_id]);
     
@@ -138,7 +132,7 @@ class account_settings extends Config {
                             </div>';
                 }
             } else {
-                // User_id does not exist, perform insert
+
                 $stmt = $connection->prepare("INSERT INTO `billing_tbl` (`user_id`, `firstname`, `lastname`, `country`, `address`, `city`, `postcode`, `phoneno`, `email`, `order_notes`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$user_id, $firstname, $lastname, $country, $address, $city, $zipcode, $phone_number, $email, $order_notes]);
     
@@ -156,10 +150,89 @@ class account_settings extends Config {
                             </div>';
                 }
             }
-            
         }
-        
     }
+
+    public function sellerChangePassword() {
+        if (isset($_POST['security_submit'])) {
+            $old_password = md5($_POST['old_password']);
+            $new_password = $_POST['new_password'];
+            $confirm_password = $_POST['confirm_password'];
+            $seller_id = $_POST['seller_id'];
+    
+            $connection = $this->openConnection();
+            $stmt = $connection->prepare("SELECT password FROM `user_tbl` WHERE `id` = ?");
+            $stmt->execute([$seller_id]);
+            $stored_password = $stmt->fetchColumn();
+    
+            if ($stored_password === $old_password) {
+                if ($new_password === $confirm_password) {
+                    if ($this->validatePassword($new_password)) {
+                        $encryptedPassword = md5($new_password);
+    
+                        $stmt = $connection->prepare("UPDATE `user_tbl` SET `password` = ? WHERE `id` = ?");
+                        $stmt->execute([$encryptedPassword, $seller_id]);
+    
+                        if ($stmt->rowCount() > 0) {
+                            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    Password successfully changed.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                        } else {
+                            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    Failed to update password.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                        }
+                    } else {
+                        echo '<div class="alert alert-info alert-dismissible fade show" role="alert">
+                        Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>';
+                    }
+                } else {
+                    echo '<div class="alert alert-info alert-dismissible fade show" role="alert">
+                            Passwords do not match.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+                }
+            } else {
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        Incorrect old password.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>';
+            }
+        }
+    }
+    
+    public function validatePassword($password) {
+        // Define password requirements
+        $minLength = 8;
+        $hasUppercase = preg_match('/[A-Z]/', $password);
+        $hasLowercase = preg_match('/[a-z]/', $password);
+        $hasNumber = preg_match('/\d/', $password);
+    
+        // Check if password meets the requirements
+        if (strlen($password) < $minLength || !$hasUppercase || !$hasLowercase || !$hasNumber) {
+            return false;
+        }
+    
+        return true;
+    }
+    
+    
+    
+    
     
     
 }

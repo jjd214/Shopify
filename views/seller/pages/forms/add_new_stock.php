@@ -279,6 +279,12 @@
                 <span class="menu-title">Add Product</span>
               </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pages/tables/orders.php">
+                    <span class="icon-bg"><i class="mdi mdi-cart menu-icon"></i></span>
+                    <span class="menu-title">Order</span>
+                </a>
+            </li>
             <!-- <li class="nav-item">
               <a class="nav-link" href="../../pages/charts/chartjs.html">
                 <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
@@ -316,7 +322,7 @@
             </li>
             <li class="nav-item sidebar-user-actions">
               <div class="sidebar-user-menu">
-                <a href="#" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
+                <a href="./settings.php" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
                   <span class="menu-title">Settings</span>
                 </a>
               </div>

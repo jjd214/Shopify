@@ -312,4 +312,21 @@ function viewSellerDetails($seller_id) {
 
     return $details;
 }
+
+function sellerChangePassword() {
+    $update = new Account_settings();
+    $update->sellerChangePassword();
+}
+
+function viewOrders($seller_id) {
+    $view = new View();
+    $orders = $view->viewOrders($seller_id);
+
+    return $orders;
+}
+
+function shipOrder() {
+    $view = new View();
+    $view->shipOrder();
+}
 ?>
