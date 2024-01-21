@@ -74,6 +74,7 @@ if(isset($_POST['delete_item'])) {
     $_SESSION['prices'] = $prices;
     $_SESSION['product_id'] = $_POST['product_id'];
     $_SESSION['customer_name'] = $_POST['customer_name'];
+    $_SESSION['customer_id'] = $_POST['user_id'];
 
     // Redirect to place_order.php
     header("Location: place_order.php");

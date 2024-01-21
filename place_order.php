@@ -22,6 +22,7 @@ if (!$access) {
     $prices = $_SESSION['prices'];
     $product_id = $_SESSION['product_id'];
     $customer_name = $_SESSION['customer_name'];
+    $customer_id = $_SESSION['customer_id'];
     
     $randomStores = viewRandomStores();
     
@@ -44,7 +45,8 @@ if (!$access) {
             $qtys,
             $prices,
             $product_id,
-            $customer_name
+            $customer_name,
+            $customer_id
         );
     
         $deduct->deleteItem($stock_ids);
