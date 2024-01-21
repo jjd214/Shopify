@@ -305,4 +305,11 @@ function viewOnSaleProducts() {
 
     return $products;
 }
+
+function viewSellerDetails($seller_id) {
+    $view = new View();
+    $details = $view->viewSellerDetails($seller_id);
+
+    return $details;
+}
 ?>

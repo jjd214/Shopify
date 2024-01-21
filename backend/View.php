@@ -354,6 +354,15 @@ class View extends Config {
         
         return $data;
     }
+
+    public function viewSellerDetails($seller_id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `user_tbl` WHERE `access` = 'seller' AND `id` = ?");
+        $stmt->execute([$seller_id]);
+        $data = $stmt->fetch();
+
+        return $data;
+    }
     
 }
 

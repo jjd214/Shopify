@@ -1,7 +1,8 @@
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
-
+<?php ob_start(); ?>
 <?php $sellerDetails = userDetails(); ?>
 <?php $products = viewSellerProduct($sellerDetails['fullname']); ?>
+<?php $sellerData = viewSellerDetails($sellerDetails['id']); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -321,11 +322,11 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> ADD PRODUCT </h3>
+              <h3 class="page-title"> Bussiness Settings </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">ADD PRODUCT</li>
+                  <li class="breadcrumb-item active" aria-current="page">Bussiness Settings</li>
                 </ol>
               </nav>
             </div>
@@ -333,36 +334,58 @@
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Add New Product</h4>
-                    <?php addNewProduct(); ?>
+                    <?php
+                    if(isset($_SESSION['status'])) {
+                        echo $_SESSION['status'];
+                        unset($_SESSION['status']);
+                    }
+                    ?>
+                    <h4 class="card-title">Manage Account Settings</h4>
+                    <?php businessSettings(); ?>
                     <p class="card-description"> Lorem ipsum </p>
-                      <form class="forms-sample" method="post">
-                        <div class="form-group">
-                            <label for="product_name">Product Name</label>
-                            <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter Product Name" required />
+                    <form action="" method="post" enctype="multipart/form-data" class="forms-sample">
+                    <div class="form-group">
+                            <label for="product_image">Business Image</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="image" aria-describedby="file-upload-info">
+                                    <label class="custom-file-label" style="padding-top: 10px;">Choose file</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="product_type">Product Type</label>
-                            <select class="form-control" id="product_type" name="product_type">
-                                <option value="">---</option>
-                                <option value="Food">Food</option>
-                                <option value="Clothing">Clothing</option>
-                                <option value="Tools">Tools</option>
-                            </select>
+                            <label for="store_name">Store Name</label>
+                            <input type="text" class="form-control" id="store_name" name="store_name" placeholder="Enter Store Name" value="<?= isset($sellerData['storename']) ? $sellerData['storename'] : '' ?>" required>
                         </div>
+
                         <div class="form-group">
-                            <label for="description">Description</label>
-                            <input type="text" class="form-control" id="description" name="description" placeholder="Enter short description" required />
+                            <label for="fname">First Name</label>
+                            <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter First Name" value="<?= isset($sellerData['firstname']) ? $sellerData['firstname'] : '' ?>" required>
                         </div>
+
                         <div class="form-group">
-                            <label for="min_stock">Minimum Stock</label>
-                            <input type="number" class="form-control" id="min_stock" name="min_stock" min="1" required />
+                            <label for="lname">Last Name</label>
+                            <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Last Name" value="<?= isset($sellerData['lastname']) ? $sellerData['lastname'] : '' ?>" required>
                         </div>
-                        <input type="hidden" name="name" value="<?= $sellerDetails['fullname'] ?>">
-                        <input type="hidden" name="seller_id" value="<?= $sellerDetails['id'] ?>">
-                        
-                        <button type="submit" name="submit" class="btn btn-primary mr-2">Add Product</button>
-                        <button class="btn btn-light">Cancel</button>
+
+                        <div class="form-group">
+                            <label for="mname">Middle Name</label>
+                            <input type="text" class="form-control" id="mname" name="mname" placeholder="Enter Middle Name" value="<?= isset($sellerData['middlename']) ? $sellerData['middlename'] : '' ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?= isset($sellerData['email']) ? $sellerData['email'] : '' ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Business Description</label>
+                            <textarea class="form-control" id="description" name="description" placeholder="Enter Business Description" rows="4" required><?= isset($sellerData['storename']) ? $sellerData['storename'] : '' ?></textarea>
+                        </div>
+
+                        <input type="hidden" name="id" value="<?= $sellerDetails['id'] ?>">
+
+                        <button type="submit" name="submit" class="btn btn-primary mr-2">Save Changes</button>
                     </form>
                   </div>
                 </div>
