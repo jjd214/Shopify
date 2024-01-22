@@ -1,7 +1,19 @@
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
 
+<?php
+
+$sellerDetails = userDetails();
+
+if($sellerDetails['fullname'] == null) {
+  header("Location: /e-commerce/signin.php");
+} else if ($sellerDetails['access'] == 'customer') {
+  header("Location: /e-commerce/index.php");
+} else {
+    // shipOrder(); 
+?>
+
 <?php $sellerDetails = userDetails(); ?>
-<?php $products = viewSellerProduct($sellerDetails['fullname']); ?>
+<?php $orders = viewOrderHistory($sellerDetails['id']); }?>
 
 
 <!DOCTYPE html>
@@ -18,7 +30,7 @@
   <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
   <!-- Plugin css for this page -->
-  <!-- End Plugin css for this page -->
+  <!-- End plugin css for this page -->
   <!-- inject:css -->
   <!-- endinject -->
   <!-- Layout styles -->
@@ -28,7 +40,7 @@
 </head>
 
 <body>
-  <div class=" container-scroller">
+  <div class="container-scroller">
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -307,6 +319,7 @@
                     <span class="menu-title">Order History</span>
                 </a>
             </li>
+
           <!-- <li class="nav-item">
             <a class="nav-link" href="../../pages/charts/chartjs.html">
               <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
@@ -324,7 +337,7 @@
               <span class="icon-bg"><i class="mdi mdi-lock menu-icon"></i></span>
               <span class="menu-title">User Pages</span>
               <i class="menu-arrow"></i>
-            </a> -->
+            </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="../../pages/samples/blank-page.html"> Blank Page </a>
@@ -335,7 +348,7 @@
                 <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-500.html"> 500 </a></li>
               </ul>
             </div>
-          </li>
+          </li> -->
           <li class="nav-item sidebar-user-actions mt-3">
             <div class="user-details">
               <div class="d-flex justify-content-between align-items-center">
@@ -377,46 +390,53 @@
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
-          <div class="page-header">
-            <h3 class="page-title"> On Sales Products </h3>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"></a></li>
-                <li class="breadcrumb-item active" aria-current="page">Products</li>
-              </ol>
-            </nav>
-          </div>
-          <div class="row">
-                <div class="col-lg-12 grid-margin">
+            <!-- Sales Table Section -->
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Product Listing</h4>
-                            <div class="row">
-                                <?php if ($products): ?>
-                                    <?php foreach ($products as $product): ?>
-                                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                                            <div class="card border-primary">
-                                                <div class="card-body">
-                                                    <p class="card-text">
-                                                        <a href="/e-commerce/views/seller/pages/tables/product_details.php?id=<?= $product['id']; ?>">
-                                                            <?= $product['product_name']; ?>
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <div class="col-12">
-                                        <p class="text-center text-muted">No products available.</p>
-                                    </div>
-                                <?php endif; ?>
+                            <h4 class="card-title">Orders History Table</h4>
+                            <p class="card-description"> Items <code></code> </p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Cart ID</th>
+                                            <th>Customer Name</th>
+                                            <th>Order Date</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($orders as $index => $order): ?>
+                                        <tr>
+                                            <td><?= $index + 1 ?></td>
+                                            <td><?= $order['sale_cart_id'] ?></td>
+                                            <td><?= $order['sale_customer_name'] ?></td>
+                                            <td><?= $order['sale_order_date'] ?></td>
+                                            <td>Delivered</td>
+                                            <td>
+                                                <form action="delivered_order.php?id=<?= $order['sale_cart_id'] ?>" method="post">
+                                                    <input type="hidden" name="customer_name" value="<?= $order['sale_customer_name'] ?>">
+                                                    <input type="hidden" name="id" value="<?= $order['sale_id'] ?>">
+                                                    <button class="btn btn-primary btn-sm">View Orders</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
           <div class="footer-inner-wraper">
@@ -431,8 +451,11 @@
         </footer>
         <!-- partial -->
       </div>
+      <!-- main-panel ends -->
     </div>
+    <!-- page-body-wrapper ends -->
   </div>
+  <!-- container-scroller -->
   <!-- plugins:js -->
   <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->

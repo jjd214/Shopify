@@ -286,6 +286,12 @@
                     <span class="menu-title">Order</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pages/tables/order_history.php">
+                    <span class="icon-bg"><i class="mdi mdi-history menu-icon"></i></span>
+                    <span class="menu-title">Order History</span>
+                </a>
+            </li>
             <li class="nav-item sidebar-user-actions mt-3">
               <div class="user-details">
                 <div class="d-flex justify-content-between align-items-center">

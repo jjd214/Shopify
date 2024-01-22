@@ -181,18 +181,18 @@ class View extends Config {
 
     public function getTotalSales($sellerName) {
         $connection = $this->openConnection();
-        $stmt = $connection->prepare("SELECT SUM(sales_tbl.price) AS total_sales
+        $stmt = $connection->prepare("SELECT SUM(sales_tbl.price * sales_tbl.qty) AS total_sales
                                       FROM products_tbl
                                       INNER JOIN sales_tbl ON products_tbl.id = sales_tbl.product_id
                                       WHERE products_tbl.added_by = :sellerName");
         $stmt->bindParam(':sellerName', $sellerName, PDO::PARAM_STR);
         $stmt->execute();
     
-        // Fetch the total sales
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
         return $result['total_sales'];
     }
+    
 
     public function getTotalSalesForDate($sellerName, $date) {
         $connection = $this->openConnection();
@@ -364,10 +364,38 @@ class View extends Config {
         return $data;
     }
 
+    // public function viewOrders($seller_id) {
+    //     $connection = $this->openConnection();
+    //     $stmt = $connection->prepare("SELECT
+    //                                     sales_tbl.id AS sale_id,
+    //                                     sales_tbl.cart_id AS sale_cart_id,
+    //                                     sales_tbl.product_id AS sale_product_id,
+    //                                     sales_tbl.brand_name AS sale_brand_name,
+    //                                     sales_tbl.qty AS sale_qty,
+    //                                     sales_tbl.price AS sale_price,
+    //                                     sales_tbl.qty * sales_tbl.price AS total_price,
+    //                                     sales_tbl.date_purchased AS sale_order_date, 
+    //                                     sales_tbl.status AS sale_status,
+    //                                     sales_tbl.customer_name AS sale_customer_name,
+    //                                     products_tbl.id AS product_id,
+    //                                     products_tbl.seller_id AS product_seller_id
+    //                                 FROM
+    //                                     sales_tbl
+    //                                 JOIN
+    //                                     products_tbl ON sales_tbl.product_id = products_tbl.id
+    //                                 WHERE
+    //                                     products_tbl.seller_id = ?
+    //                                 ");
+    //     $stmt->execute([$seller_id]);
+    //     $data = $stmt->fetchAll();
+
+    //     return $data;
+    // }
     public function viewOrders($seller_id) {
         $connection = $this->openConnection();
         $stmt = $connection->prepare("SELECT
-                                        sales_tbl.id AS sale_id,
+                                        MIN(sales_tbl.id) AS sale_id,
+                                        sales_tbl.cart_id AS sale_cart_id,
                                         sales_tbl.product_id AS sale_product_id,
                                         sales_tbl.brand_name AS sale_brand_name,
                                         sales_tbl.qty AS sale_qty,
@@ -384,12 +412,15 @@ class View extends Config {
                                         products_tbl ON sales_tbl.product_id = products_tbl.id
                                     WHERE
                                         products_tbl.seller_id = ?
+                                    GROUP BY
+                                        sales_tbl.cart_id
                                     ");
         $stmt->execute([$seller_id]);
         $data = $stmt->fetchAll();
-
+    
         return $data;
     }
+    
 
     public function shipOrder() {
 
@@ -400,9 +431,59 @@ class View extends Config {
             $connection = $this->openConnection();
             $stmt = $connection->prepare("UPDATE `sales_tbl` SET `status` = 'Shipped' WHERE `customer_name` = ? AND `id` = ?");
             $stmt->execute([$customer_name,$sales_id]);
+
+            unset($_SESSION['sales_id']);
+            header("Location: orders.php");
         }
     }
+
+    public function viewSellerOrder($cart_id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `sales_tbl` WHERE `cart_id` = ?");
+        $stmt->execute([$cart_id]);
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
     
+    public function viewShippingAddress($customer_id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `billing_tbl` WHERE `user_id` = ?");
+        $stmt->execute([$customer_id]);
+        $data = $stmt->fetch();
+
+        return $data;
+    }
+
+    public function viewOrderHistory($seller_id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT
+                                        MIN(sales_tbl.id) AS sale_id,
+                                        sales_tbl.cart_id AS sale_cart_id,
+                                        sales_tbl.product_id AS sale_product_id,
+                                        sales_tbl.brand_name AS sale_brand_name,
+                                        sales_tbl.qty AS sale_qty,
+                                        sales_tbl.price AS sale_price,
+                                        sales_tbl.qty * sales_tbl.price AS total_price,
+                                        sales_tbl.date_purchased AS sale_order_date, 
+                                        sales_tbl.status AS sale_status,
+                                        sales_tbl.customer_name AS sale_customer_name,
+                                        products_tbl.id AS product_id,
+                                        products_tbl.seller_id AS product_seller_id
+                                    FROM
+                                        sales_tbl
+                                    JOIN
+                                        products_tbl ON sales_tbl.product_id = products_tbl.id
+                                    WHERE
+                                        products_tbl.seller_id = ? AND sales_tbl.status = 'Shipped'
+                                    GROUP BY
+                                        sales_tbl.cart_id
+                                    ");
+        $stmt->execute([$seller_id]);
+        $data = $stmt->fetchAll();
+    
+        return $data;
+    }
 }
 
 ?>

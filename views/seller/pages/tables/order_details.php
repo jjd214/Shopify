@@ -1,7 +1,40 @@
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
 
-<?php $sellerDetails = userDetails(); ?>
-<?php $products = viewSellerProduct($sellerDetails['fullname']); ?>
+<?php
+ob_start();
+session_start();
+$sellerDetails = userDetails();
+
+if($sellerDetails['fullname'] == null) {
+  header("Location: /e-commerce/signin.php");
+} else if ($sellerDetails['access'] == 'customer') {
+  header("Location: /e-commerce/index.php");
+} else {
+    shipOrder(); 
+?>
+
+<?php
+$sellerDetails = userDetails();
+
+if (isset($_POST['id'])) :
+    $_SESSION['sales_id'] = $_POST['id'];
+    $sales_id = $_SESSION['sales_id'];
+
+    if (isset($sales_id)) :
+?>
+        <script>alert("qWEWQe");</script>
+<?php
+    else :
+?>
+        <script>alert("nawala");</script>
+<?php
+    endif;
+endif;
+?>
+
+<?php $orders = viewSellerOrder($_GET['id']); ?>
+<?php $status = viewOrders($sellerDetails['id']); ?>
+<?php $shippingAddress = viewShippingAddress($orders[0]['customer_id']); } ?>
 
 
 <!DOCTYPE html>
@@ -18,7 +51,7 @@
   <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
   <!-- Plugin css for this page -->
-  <!-- End Plugin css for this page -->
+  <!-- End plugin css for this page -->
   <!-- inject:css -->
   <!-- endinject -->
   <!-- Layout styles -->
@@ -28,7 +61,7 @@
 </head>
 
 <body>
-  <div class=" container-scroller">
+  <div class="container-scroller">
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -324,7 +357,7 @@
               <span class="icon-bg"><i class="mdi mdi-lock menu-icon"></i></span>
               <span class="menu-title">User Pages</span>
               <i class="menu-arrow"></i>
-            </a> -->
+            </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="../../pages/samples/blank-page.html"> Blank Page </a>
@@ -335,7 +368,7 @@
                 <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-500.html"> 500 </a></li>
               </ul>
             </div>
-          </li>
+          </li> -->
           <li class="nav-item sidebar-user-actions mt-3">
             <div class="user-details">
               <div class="d-flex justify-content-between align-items-center">
@@ -374,49 +407,110 @@
           </li>
         </ul>
       </nav>
+      
       <!-- partial -->
       <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="page-header">
-            <h3 class="page-title"> On Sales Products </h3>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"></a></li>
-                <li class="breadcrumb-item active" aria-current="page">Products</li>
-              </ol>
-            </nav>
+      <div class="content-wrapper">
+          <!-- Sales Table Section -->
+          <div class="row justify-content-center">
+              <div class="col-lg-8">
+                  <div class="card">
+                      <div class="card-body">
+                          <h2 class="text-center mb-4">Order Receipt</h2>
+                          <?php if (!empty($orders)) : ?>
+                              <p class="mb-2"><strong>Customer Name:</strong> <?= $orders[0]['customer_name']; ?></p>
+                              <div class="table-responsive">
+                                  <table class="table table-bordered">
+                                      <thead>
+                                          <tr>
+                                              <th>Items</th>
+                                              <th>Quantity</th>
+                                              <th>Price</th>
+                                              <th>Customer ID</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <?php $totalPrice = 0; ?>
+                                          <?php foreach ($orders as $order) : ?>
+                                              <tr>
+                                                  <td><?= $order['brand_name'] ?></td>
+                                                  <td><?= $order['qty'] ?></td>
+                                                  <td><?= $order['price'] ?></td>
+                                                  <td><?= $order['customer_id'] ?></td>
+                                              </tr>
+                                              <?php $totalPrice += $order['qty'] * $order['price']; ?>
+                                          <?php endforeach; ?>
+                                      </tbody>
+                                  </table>
+                              </div>
+                              <div class="mt-4">
+                                  <h3><strong>Total Price:</strong> ₱ <?= $totalPrice ?></h3>
+                              </div>
+                              <p class="text-muted mt-3 text-center">Thank you for your purchase!</p>
+                              <div class="text-center"> 
+                              <form action="" method="post">
+                                  <input type="hidden" name="customer_name" value="<?= $orders[0]['customer_name'] ?>">
+                                  <input type="hidden" name="sales_id" value="<?= $sales_id ?>">
+                                  <button class="btn btn-primary btn-sm mt-3" name="submit_status">Ship Order</button>
+                              </form>
+                              </div>
+                          <?php else : ?>
+                              <p class="text-center">No orders found.</p>
+                          <?php endif; ?>
+                      </div>
+                  </div>
+              </div>
           </div>
-          <div class="row">
-                <div class="col-lg-12 grid-margin">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Product Listing</h4>
+          <div class="row justify-content-center mt-4">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="text-center mb-4">Shipping Address</h2>
+                        <div class="mb-4">
                             <div class="row">
-                                <?php if ($products): ?>
-                                    <?php foreach ($products as $product): ?>
-                                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                                            <div class="card border-primary">
-                                                <div class="card-body">
-                                                    <p class="card-text">
-                                                        <a href="/e-commerce/views/seller/pages/tables/product_details.php?id=<?= $product['id']; ?>">
-                                                            <?= $product['product_name']; ?>
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <div class="col-12">
-                                        <p class="text-center text-muted">No products available.</p>
-                                    </div>
-                                <?php endif; ?>
+                                <div class="col-md-6">
+                                    <h4><strong>Recipient Name:</strong></h4>
+                                    <p><?= $shippingAddress['firstname']. " ".$shippingAddress['lastname'] ?></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4><strong>Country:</strong></h4>
+                                    <p><?= $shippingAddress['country'] ?></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4><strong>Address:</strong></h4>
+                                    <p><?= $shippingAddress['address'] ?></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4><strong>Post Code:</strong></h4>
+                                    <p><?= $shippingAddress['postcode'] ?></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4><strong>Phone Number:</strong></h4>
+                                    <p><?= $shippingAddress['phoneno'] ?></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4><strong>Email:</strong></h4>
+                                    <p><?= $shippingAddress['email'] ?></p>
+                                </div>
                             </div>
                         </div>
+                        <?php if (!empty($shippingAddress['order_notes'])) : ?>
+                            <div class="mb-3">
+                                <h4><strong>Notes from Buyer:</strong></h4>
+                                <p><?= $shippingAddress['order_notes'] ?></p>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
+      </div>
+
+        <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
           <div class="footer-inner-wraper">
@@ -431,8 +525,11 @@
         </footer>
         <!-- partial -->
       </div>
+      <!-- main-panel ends -->
     </div>
+    <!-- page-body-wrapper ends -->
   </div>
+  <!-- container-scroller -->
   <!-- plugins:js -->
   <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->

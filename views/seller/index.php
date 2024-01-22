@@ -254,6 +254,12 @@ if($sellerDetails['fullname'] == null) {
                     <span class="menu-title">Order</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="pages/tables/order_history.php">
+                    <span class="icon-bg"><i class="mdi mdi-history menu-icon"></i></span>
+                    <span class="menu-title">Order History</span>
+                </a>
+            </li>
             <!-- <li class="nav-item">
               <a class="nav-link" href="pages/charts/chartjs.html">
                 <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>

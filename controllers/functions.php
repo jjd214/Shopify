@@ -329,4 +329,25 @@ function shipOrder() {
     $view = new View();
     $view->shipOrder();
 }
+
+function viewSellerOrder($cart_id) {
+    $view = new View();
+    $orders = $view->viewSellerOrder($cart_id);
+
+    return $orders;
+}
+
+function viewShippingAddress($customer_id) {
+    $view = new View();
+    $address = $view->viewShippingAddress($customer_id);
+
+    return $address;
+}
+
+function viewOrderHistory($seller_id) {
+    $view = new View();
+    $history = $view->viewOrderHistory($seller_id);
+
+    return $history;
+}
 ?>

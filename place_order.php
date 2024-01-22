@@ -16,13 +16,13 @@ if (!$access) {
 
     $details = viewBillingAddress($user['id']);
 
-    // Retrieve values from session
     $stock_ids = $_SESSION['stock_ids'];
     $qtys = $_SESSION['qtys'];
     $prices = $_SESSION['prices'];
     $product_id = $_SESSION['product_id'];
     $customer_name = $_SESSION['customer_name'];
     $customer_id = $_SESSION['customer_id'];
+    // $cart_id = $_SESSION['cart_id'];
     
     $randomStores = viewRandomStores();
     
@@ -39,6 +39,8 @@ if (!$access) {
         $deduct = new Add_cart();
         $sales = new Sales(new View());
     
+        $cart_id = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+
         $deduct->deductQtyItem($qtys, $stock_ids);
         $sales->insertSales(
             $stock_ids,
@@ -46,10 +48,18 @@ if (!$access) {
             $prices,
             $product_id,
             $customer_name,
-            $customer_id
+            $customer_id,
+            $cart_id
         );
     
         $deduct->deleteItem($stock_ids);
+
+        unset($_SESSION['stock_ids']);
+        unset($_SESSION['qtys']);
+        unset($_SESSION['prices']);
+        unset($_SESSION['product_id']);
+        unset($_SESSION['customer_name']);
+        unset($_SESSION['customer_id']);
         
         header("Location: shoping-cart.php");
         exit();

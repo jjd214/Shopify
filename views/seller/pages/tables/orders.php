@@ -9,7 +9,7 @@ if($sellerDetails['fullname'] == null) {
 } else if ($sellerDetails['access'] == 'customer') {
   header("Location: /e-commerce/index.php");
 } else {
-    shipOrder(); 
+    // shipOrder(); 
 ?>
 
 <?php $sellerDetails = userDetails(); ?>
@@ -313,6 +313,12 @@ if($sellerDetails['fullname'] == null) {
                     <span class="menu-title">Order</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pages/tables/order_history.php">
+                    <span class="icon-bg"><i class="mdi mdi-history menu-icon"></i></span>
+                    <span class="menu-title">Order History</span>
+                </a>
+            </li>
           <!-- <li class="nav-item">
             <a class="nav-link" href="../../pages/charts/chartjs.html">
               <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
@@ -395,11 +401,8 @@ if($sellerDetails['fullname'] == null) {
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
+                                            <th>Cart ID</th>
                                             <th>Customer Name</th>
-                                            <th>Item Name</th>
-                                            <th>Qty</th>
-                                            <th>Price</th>
-                                            <th>Total Price</th>
                                             <th>Order Date</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -409,18 +412,15 @@ if($sellerDetails['fullname'] == null) {
                                         <?php foreach ($orders as $index => $order): ?>
                                         <tr>
                                             <td><?= $index + 1 ?></td>
+                                            <td><?= $order['sale_cart_id'] ?></td>
                                             <td><?= $order['sale_customer_name'] ?></td>
-                                            <td><?= $order['sale_brand_name'] ?></td>
-                                            <td><?= $order['sale_qty'] ?></td>
-                                            <td><?= $order['sale_price'] ?></td>
-                                            <td><?= $order['total_price'] ?></td>
                                             <td><?= $order['sale_order_date'] ?></td>
                                             <td><?= $order['sale_status'] ?></td>
                                             <td>
-                                                <form action="" method="post">
+                                                <form action="order_details.php?id=<?= $order['sale_cart_id'] ?>" method="post">
                                                     <input type="hidden" name="customer_name" value="<?= $order['sale_customer_name'] ?>">
-                                                    <input type="hidden" name="sales_id" value="<?= $order['sale_id'] ?>">
-                                                    <button class="btn btn-primary btn-sm" name="submit_status">Ship Order</button>
+                                                    <input type="hidden" name="id" value="<?= $order['sale_id'] ?>">
+                                                    <button class="btn btn-primary btn-sm">View Orders</button>
                                                 </form>
                                             </td>
                                         </tr>
