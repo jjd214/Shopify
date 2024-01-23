@@ -10,6 +10,7 @@ class Sales extends Config {
 
     public function insertSales($stock_ids, $qtys, $prices, $product_id, $customer_name,$customer_id,$cart_id) {
         foreach ($stock_ids as $index => $stock_id) {
+            
             $items = $this->view->getStockDetails($stock_id);
             $brand = $items['vendor_name'];
     

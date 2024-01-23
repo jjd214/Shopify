@@ -60,5 +60,18 @@ class Add_new_stock extends Config {
             }
         }
     }
+
+    public function delete_stock(){
+        if(isset($_POST['delete_item'])) {
+
+            $id = $_POST['stock_id'];
+            
+            $connection = $this->openConnection();
+            $stmt = $connection->prepare("DELETE FROM `productItems_tbl` WHERE `id` = ?");
+            $stmt->execute([$id]);
+
+            header("Location: " .$_SERVER['HTTP_REFERER']);
+        }
+    }
 }
 ?>

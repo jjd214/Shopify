@@ -12,9 +12,23 @@ if($adminDetails['fullname'] == null) {
   header("Location: /e-commerce/views/seller/index.php");
 } else {
 
-   $accounts = viewCustomerAccounts();
+    $sellerDetails = viewSellerDetails($_GET['id']);
+
+    $fullname = $sellerDetails['firstname']. " ".$sellerDetails['lastname'];
+
+    $view = new View();
+    $totalRevenue = $view->getTotalSales($fullname);
+    $expectedRevenue = $view->viewExpectedRevenue($fullname);
+  
+    $increaseSinceYesterday = $view->getTotalRevenueSinceYesterday($fullname);
+    $totalOrder = viewTotalOrders($fullname);
+    $totalItem = viewTotalItem($fullname);
+
 }
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +44,7 @@ if($adminDetails['fullname'] == null) {
   <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
   <!-- Plugin css for this page -->
-  <!-- End plugin css for this page -->
+  <!-- End Plugin css for this page -->
   <!-- inject:css -->
   <!-- endinject -->
   <!-- Layout styles -->
@@ -40,7 +54,7 @@ if($adminDetails['fullname'] == null) {
 </head>
 
 <body>
-  <div class="container-scroller">
+  <div class=" container-scroller">
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -299,6 +313,28 @@ if($adminDetails['fullname'] == null) {
                     <span class="menu-title">Sales Overview</span>
                 </a>
             </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
+              <span class="menu-title">UI Elements</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/buttons.html">Buttons</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/dropdowns.html">Dropdowns</a>
+                </li>
+                <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/typography.html">Typography</a>
+                </li>
+              </ul>
+            </div>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="../../pages/products/product_list.php">
+              <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
+              <span class="menu-title">Products</span>
+            </a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="../../pages/forms/add_new_product.php">
               <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
@@ -322,7 +358,7 @@ if($adminDetails['fullname'] == null) {
               <span class="icon-bg"><i class="mdi mdi-lock menu-icon"></i></span>
               <span class="menu-title">User Pages</span>
               <i class="menu-arrow"></i>
-            </a>
+            </a> -->
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="../../pages/samples/blank-page.html"> Blank Page </a>
@@ -333,7 +369,7 @@ if($adminDetails['fullname'] == null) {
                 <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-500.html"> 500 </a></li>
               </ul>
             </div>
-          </li> -->
+          </li>
           <li class="nav-item sidebar-user-actions mt-3">
             <div class="user-details">
               <div class="d-flex justify-content-between align-items-center">
@@ -372,67 +408,77 @@ if($adminDetails['fullname'] == null) {
           </li>
         </ul>
       </nav>
-      <!-- partial -->
+      
       <div class="main-panel">
-    <div class="content-wrapper">
-
-        
-
-        <!-- Sales Table Section -->
-        <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Customer Accounts Table</h4>
-                        <p class="card-description"> Accounts </p>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Account Type</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($accounts as $account): ?>
-                                            <td><?= $account['firstname']. " ".$account['lastname']. " ". $account['middlename'] ?></td>
-                                            <td><?= $account['email'] ?></td>
-                                            <td><?= $account['account_type'] ?></td>
-                                            <td><a href="/e-commerce/views/admin/pages/list/customer_details.php?id=<?= $account['id']; ?>" class="btn btn-primary btn-sm">View</a></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="content-wrapper">
+    <div class="page-header">
+      <h3 class="page-title">Sales Overview</h3>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Sales</li>
+        </ol>
+      </nav>
     </div>
-
-
-        <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-        <footer class="footer">
-          <div class="footer-inner-wraper">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com
-                2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
-                  href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard templates</a> from
-                Bootstrapdash.com</span>
+    <div class="row">
+      <div class="col-md-6 col-lg-3">
+        <div class="card sales-card h-100 border-0 rounded-lg p-4 shadow">
+          <div class="card-body text-center">
+            <i class="mdi mdi-shopping mdi-48px mb-3"></i>
+            <div class="sales-info">
+              <h2 class="h5">Total Orders</h2>
+              <p class="h4"><?= $totalOrder['totalOrders'] ?></p>
             </div>
           </div>
-        </footer>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card sales-card h-100 border-0 rounded-lg p-4 shadow">
+          <div class="card-body text-center">
+            <i class="mdi mdi-package mdi-48px mb-3"></i>
+            <div class="sales-info">
+              <h2 class="h5">Total Items Sold</h2>
+              <p class="h4"><?= $totalItem['TotalItem'] ?></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card sales-card h-100 border-0 rounded-lg p-4 shadow">
+          <div class="card-body text-center">
+            <i class="mdi mdi-currency-usd mdi-48px mb-3"></i>
+            <div class="sales-info">
+              <h2 class="h5">Total Revenue</h2>
+              <p class="h4"><?= $totalRevenue ?></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card sales-card h-100 border-0 rounded-lg p-4 shadow">
+          <div class="card-body text-center">
+            <i class="mdi mdi-currency-usd-off mdi-48px mb-3"></i>
+            <div class="sales-info">
+              <h2 class="h5">Total Expected Revenue</h2>
+              <p class="h4"><?= $expectedRevenue ?></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+        </div>
         <!-- partial -->
       </div>
-      <!-- main-panel ends -->
     </div>
-    <!-- page-body-wrapper ends -->
   </div>
-  <!-- container-scroller -->
   <!-- plugins:js -->
   <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->

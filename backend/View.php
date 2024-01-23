@@ -484,6 +484,66 @@ class View extends Config {
     
         return $data;
     }
+
+    public function viewCustomerDetails($customer_id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `user_tbl` WHERE `access` = 'customer' AND `id` = ?");
+        $stmt->execute([$customer_id]);
+        $data = $stmt->fetch();
+
+        return $data;
+    }
+
+    public function viewStores() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `user_tbl` WHERE `access` = 'seller'");
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
+
+    public function viewTotalCustomer() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT COUNT(*) AS totalCustomer FROM `user_tbl` WHERE `access` = 'customer'");
+        $stmt->execute();
+        $totalCustomer = $stmt->fetchColumn();
+    
+        return $totalCustomer;
+    }
+
+    public function viewTotalSellers() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT COUNT(*) AS totalSeller FROM `user_tbl` WHERE `access` = 'seller'");
+        $stmt->execute();
+        $totalSeller = $stmt->fetchColumn();
+    
+        return $totalSeller;
+    }
+
+    public function viewTotalGMV() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT SUM(qty * price) AS gmv FROM `sales_tbl`");
+        $stmt->execute();
+        $totalGMV = $stmt->fetchColumn();
+    
+        return $totalGMV;
+    }
+    
+    public function getSalesWithAdminShare() {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT *, (price * 0.1) AS admin_share FROM `sales_tbl`");
+        $stmt->execute();
+        $salesWithAdminShare = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        return $salesWithAdminShare;
+    }
+    
+    
+     
+
+
+
 }
 
 ?>

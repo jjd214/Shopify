@@ -1,8 +1,7 @@
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
 <?php ob_start(); ?>
-<?php $sellerDetails = userDetails(); ?>
-<?php $products = viewSellerProduct($sellerDetails['fullname']); ?>
-<?php $sellerData = viewSellerDetails($sellerDetails['id']); ?>
+<?php $adminDetails = userDetails(); ?>
+<?php $sellerData = viewSellerDetails($_GET['id']); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +9,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Connect Plus</title>
+    <title>Dashboard</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="../../assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="../../assets/vendors/flag-icon-css/css/flag-icon.min.css">
@@ -108,7 +107,7 @@
                   <img src="../../assets/images/faces/face28.png" alt="image">
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black"><?= $sellerDetails ['fullname'] ?></p>
+                  <p class="mb-1 text-black"><?= $adminDetails ['fullname'] ?></p>
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown dropdown-menu-right p-0 border-0 font-size-sm" aria-labelledby="profileDropdown" data-x-placement="bottom-end">
@@ -246,95 +245,112 @@
       <div class="container-fluid page-body-wrapper">
         <!-- partial:../../partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="nav-item nav-category">Main</li>
-            <li class="nav-item">
-              <a class="nav-link" href="../../index.php">
-                <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
-                <span class="menu-title">Dashboard</span>
-              </a>
-            </li>
-            <!-- <li class="nav-item">
+        <ul class="nav">
+          <li class="nav-item nav-category">Main</li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../index.php">
+              <span class="icon-bg"><i class="mdi mdi-cube menu-icon"></i></span>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
-                <span class="menu-title">UI Elements</span>
+                <span class="menu-title">Manage</span>
                 <i class="menu-arrow"></i>
               </a>
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/buttons.html">Buttons</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/typography.html">Typography</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="./seller_accounts.php">Seller Accounts</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="./customer_accounts.php">Customer Accounts</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="./products.php">Products</a></li>
                 </ul>
               </div>
-            </li> -->
-            <li class="nav-item">
-              <a class="nav-link" href="../../pages/products/product_list.php">
-                <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Products</span>
-              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../../pages/forms/add_new_product.php">
-                <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-                <span class="menu-title">Add Product</span>
-              </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../../pages/tables/orders.php">
-                    <span class="icon-bg"><i class="mdi mdi-cart menu-icon"></i></span>
-                    <span class="menu-title">Order</span>
+                <a class="nav-link" href="../../pages/list/seller_sales.php">
+                    <span class="icon-bg"><i class="mdi mdi-chart-line menu-icon"></i></span>
+                    <span class="menu-title">Sales Overview</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../../pages/tables/order_history.php">
-                    <span class="icon-bg"><i class="mdi mdi-history menu-icon"></i></span>
-                    <span class="menu-title">Order History</span>
-                </a>
-            </li>
-            <li class="nav-item sidebar-user-actions mt-3">
-              <div class="user-details">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div class="d-flex align-items-center">
-                      <div class="sidebar-profile-img">
-                        <img src="../../assets/images/faces/face28.png" alt="image">
-                      </div>
-                      <div class="sidebar-profile-text">
-                        <p class="mb-1"><?= $sellerDetails ['fullname'] ?></p>
-                      </div>
+          <li class="nav-item">
+            <a class="nav-link" href="../../pages/forms/add_new_product.php">
+              <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
+              <span class="menu-title">Add Product</span>
+            </a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="../../pages/charts/chartjs.html">
+              <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
+              <span class="menu-title">Charts</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../pages/tables/basic-table.html">
+              <span class="icon-bg"><i class="mdi mdi-table-large menu-icon"></i></span>
+              <span class="menu-title">Tables</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <span class="icon-bg"><i class="mdi mdi-lock menu-icon"></i></span>
+              <span class="menu-title">User Pages</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/blank-page.html"> Blank Page </a>
+                </li>
+                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/login.html"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/error-500.html"> 500 </a></li>
+              </ul>
+            </div>
+          </li> -->
+          <li class="nav-item sidebar-user-actions mt-3">
+            <div class="user-details">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="d-flex align-items-center">
+                    <div class="sidebar-profile-img">
+                      <img src="../../assets/images/faces/face28.png" alt="image">
+                    </div>
+                    <div class="sidebar-profile-text">
+                      <p class="mb-1"><?= $adminDetails['fullname'] ?></p>
                     </div>
                   </div>
-                  <div class="badge badge-danger">3</div>
                 </div>
+                <div class="badge badge-danger">3</div>
               </div>
-            </li>
-            <li class="nav-item sidebar-user-actions">
-              <div class="sidebar-user-menu">
-                <a href="./settings.php" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
-                  <span class="menu-title">Settings</span>
-                </a>
-              </div>
-            </li>
-            <li class="nav-item sidebar-user-actions">
-              <div class="sidebar-user-menu">
-                <a href="#" class="nav-link"><i class="mdi mdi-speedometer menu-icon"></i>
-                  <span class="menu-title">Take Tour</span></a>
-              </div>
-            </li>
-            <li class="nav-item sidebar-user-actions">
-              <div class="sidebar-user-menu">
-                <a href="/e-commerce/signout.php" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
-                  <span class="menu-title">Log Out</span></a>
-              </div>
-            </li>
-          </ul>
+            </div>
+          </li>
+          <li class="nav-item sidebar-user-actions">
+            <div class="sidebar-user-menu">
+              <a href="#" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
+                <span class="menu-title">Settings</span>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item sidebar-user-actions">
+            <div class="sidebar-user-menu">
+              <a href="#" class="nav-link"><i class="mdi mdi-speedometer menu-icon"></i>
+                <span class="menu-title">Take Tour</span></a>
+            </div>
+          </li>
+          <li class="nav-item sidebar-user-actions">
+            <div class="sidebar-user-menu">
+              <a href="/e-commerce/signout.php" class="nav-link"><i class="mdi mdi-logout menu-icon"></i>
+                <span class="menu-title">Log Out</span></a>
+            </div>
+          </li>
+        </ul>
         </nav>
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Bussiness Settings </h3>
+              <h3 class="page-title"> Seller </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Forms</a></li>
@@ -354,22 +370,17 @@
                     if(isset($_SESSION['update_status'])) {
                       echo $_SESSION['update_status'];
                       unset($_SESSION['update_status']);
-                  }
+                    }
                     ?>
-                    <h4 class="card-title">Manage Account Settings</h4>
+                    <h4 class="card-title">Manage seller Account</h4>
+                    <?php banSellerAccount(); ?>
+                    <?php deleteSellerAccount(); ?>
                     <?php businessSettings(); ?>
                     <p class="card-description"> Lorem ipsum </p>
+
                     <img src="/e-commerce/img/business_account/<?= isset($sellerData['image']) ? $sellerData['image'] : '' ?>" alt="Store image" height="200px" class="mb-3">
                     <form action="" method="post" enctype="multipart/form-data" class="forms-sample">
-                    <div class="form-group">
-                            <label for="product_image">Business Image</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image" aria-describedby="file-upload-info">
-                                    <label class="custom-file-label" style="padding-top: 10px;">Choose file</label>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="form-group">
                             <label for="store_name">Store Name</label>
                             <input type="text" class="form-control" id="store_name" name="store_name" placeholder="Enter Store Name" value="<?= isset($sellerData['storename']) ? $sellerData['storename'] : '' ?>" required>
@@ -395,49 +406,73 @@
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?= isset($sellerData['email']) ? $sellerData['email'] : '' ?>" required>
                         </div>
 
-                        <input type="hidden" name="id" value="<?= $sellerDetails['id'] ?>">
+                        <input type="hidden" name="id" value="<?= $sellerData['id'] ?>">
 
                         <button type="submit" name="submit" class="btn btn-primary mr-2">Save Changes</button>
+                        <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#banAccountModal">Ban Account</button>
+                        <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#deleteAccountModal">Delete Account</button>
+
                     </form>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- Second Card -->
-            <div class="row">
-                <div class="col-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <?php sellerChangePassword(); ?>
-                            <h4 class="card-title">Security Settings</h4>
+          </div>
 
-                            <!-- Form for Security Settings -->
-                            <form action="" method="post" class="forms-sample">
-                                <div class="form-group">
-                                    <label for="old_password">Old Password</label>
-                                    <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Enter Old Password" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="new_password">New Password</label>
-                                    <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter New Password" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="confirm_password">Confirm New Password</label>
-                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm New Password" required>
-                                </div>
-
-                                <input type="hidden" name="seller_id" value="<?= $sellerDetails['id'] ?>">
-
-                                <button type="submit" name="security_submit" class="btn btn-primary mr-2">Save Security Changes</button>
-                            </form>
-                        </div>
+          <!-- Ban Account Confirmation Modal -->
+                    
+          <div class="modal fade" id="banAccountModal" tabindex="-1" role="dialog" aria-labelledby="banAccountModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="banAccountModalLabel"  style="color: black;"    >Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <div class="modal-body">
+                        <p  style="color: black;">Are you sure you want to ban this account?</p>
+                        <form action="" method="post">
+                            <div class="form-group">
+                                <label for="violationReason" style="color: black;">Violation Reason:</label>
+                                <textarea class="form-control" id="violationReason" name="violation_reason" rows="3" required></textarea>
+                            </div>
+                            <input type="hidden" name="seller_id" value="<?= $sellerData['id'] ?>">
+                            <input type="hidden" name="ban_by" value="<?= $adminDetails['fullname'] ?>">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger" name="ban_account">Ban Account</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
-          </div>
+
+            <!-- Delete Account Confirmation Modal -->
+            <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteAccountModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this account?
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <form action="" method="post">
+                    <input type="hidden" name="seller_id" value="<?= $sellerData['id'] ?>">
+                    <button type="submit" class="btn btn-danger" name="delete_account">Delete Account</button>
+                  </form>
+                </div>
+                </div>
+            </div>
+            </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
           <footer class="footer">

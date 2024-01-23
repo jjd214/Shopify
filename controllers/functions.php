@@ -190,6 +190,11 @@ function businessSettings() {
     $settings->businessSettings();
 }
 
+function customerSettings() {
+    $settings = new Account_settings();
+    $settings->customerSettings();
+}
+
 function viewStores() {
     $stores = new View();
     $store = $stores->viewAllBusinessAccount();
@@ -349,5 +354,44 @@ function viewOrderHistory($seller_id) {
     $history = $view->viewOrderHistory($seller_id);
 
     return $history;
+}
+
+function deleteStockItem() {
+    $delete = new Add_new_stock();
+    $delete->delete_stock();
+}
+
+function banSellerAccount() {
+    $banned = new Ban_accounts();
+    $banned->ban_seller_accounts();
+}
+
+function deleteSellerAccount() {
+    $delete = new Ban_accounts();
+    $delete->delete_seller_account();
+}
+
+function viewCustomerDetails($customer_id) {
+    $view = new View();
+    $customer = $view->viewCustomerDetails($customer_id);
+
+    return $customer;
+}
+
+function banCustomerAccount() {
+    $banned = new Ban_accounts();
+    $banned->ban_customer_accounts();
+}
+
+function viewStoresDetails() {
+    $view = new View();
+    $stores = $view->viewStores();
+
+    return $stores;
+}
+
+function createNewAdmin() {
+    $admin = new Admin();
+    $admin->create_new_admin();
 }
 ?>

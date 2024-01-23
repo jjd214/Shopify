@@ -24,7 +24,7 @@ if($adminDetails['fullname'] == null) {
 } else if($adminDetails['fullname'] == 'seller') {
   header("Location: /e-commerce/views/seller/index.php");
 } else {
-
+  deleteStockItem();
 ?>
 
 <?php $adminDetails = userDetails(); ?>
@@ -323,6 +323,12 @@ if($adminDetails['fullname'] == null) {
               <span class="menu-title">Add Product</span>
             </a>
           </li>
+          <li class="nav-item">
+                <a class="nav-link" href="../../pages/list/seller_sales.php">
+                    <span class="icon-bg"><i class="mdi mdi-chart-line menu-icon"></i></span>
+                    <span class="menu-title">Sales Overview</span>
+                </a>
+            </li>
           <!-- <li class="nav-item">
             <a class="nav-link" href="../../pages/charts/chartjs.html">
               <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>
@@ -422,6 +428,7 @@ if($adminDetails['fullname'] == null) {
                                         <th>Total Sales</th>
                                         <th>Qty Remaining</th>
                                         <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -442,7 +449,37 @@ if($adminDetails['fullname'] == null) {
                                             <td><?= sprintf('%01.2f', $stock['TotalSales']); ?></td>
                                             <td><?= $stock['qty']; ?></td>
                                             <td><?= ($stock['qty'] == 0) ? 'Out of Stock' : 'Available'; ?></td>
+                                            <td>
+                                            <form action="" method="post">
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal_<?= $stock['id']; ?>">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                            </td>
                                         </tr>
+                                        <!-- Delete Confirmation Modal for each item -->
+                                        <div class="modal fade" id="deleteModal_<?= $stock['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Confirmation</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                Are you sure you want to delete this item?
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                <form action="" method="post">
+                                                  <input type="hidden" name="stock_id" value="<?= $stock['id'] ?>">
+                                                  <button type="submit" class="btn btn-danger" name="delete_item">Delete</button>
+                                                </form>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>

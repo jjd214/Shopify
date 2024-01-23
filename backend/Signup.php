@@ -22,6 +22,11 @@ class Signup extends Config {
                         Email already exists.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                       </div>';
+            } else if($this->validateBannedEmail($email)) {
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        This Account is Banned.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>';
             } else if (!$this->validatePassword($_POST['password'])) {
                 echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
                         Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.
@@ -264,6 +269,15 @@ class Signup extends Config {
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>';
         }
+    }
+
+    public function validateBannedEmail($email) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `banned_accounts_tbl` WHERE `email` = ?");
+        $stmt->execute([$email]);
+        $result = $stmt->fetch();
+
+        return $result;
     }
 }
 ?>

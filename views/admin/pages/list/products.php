@@ -297,6 +297,12 @@ if($adminDetails['fullname'] == null) {
                 </ul>
               </div>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pages/list/seller_sales.php">
+                    <span class="icon-bg"><i class="mdi mdi-chart-line menu-icon"></i></span>
+                    <span class="menu-title">Sales Overview</span>
+                </a>
+            </li>
           <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>

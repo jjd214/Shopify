@@ -14,6 +14,15 @@ if($adminDetails['fullname'] == null) {
 
   $view = new View();
 
+  $totalCustomer =  $view->viewTotalCustomer();
+  $totalSeller = $view->viewTotalSellers();
+  $totalGMV = $view->viewTotalGMV();
+  $commisionData = $view->getSalesWithAdminShare();
+
+  $totalCommission = array_sum(array_column($commisionData, 'admin_share'));
+
+  $yesterdayTotalCommission = 1000; 
+  $increasedPercentage = ($totalCommission - $yesterdayTotalCommission) / $yesterdayTotalCommission * 100;
 }
 ?>
 
@@ -231,16 +240,16 @@ if($adminDetails['fullname'] == null) {
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="pages/products/product_list.php">
-                <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Products</span>
-              </a>
+                <a class="nav-link" href="pages/list/seller_sales.php">
+                    <span class="icon-bg"><i class="mdi mdi-chart-line menu-icon"></i></span>
+                    <span class="menu-title">Sales Overview</span>
+                </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="pages/forms/add_new_product.php">
-                <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-                <span class="menu-title">Add Product</span>
-              </a>
+                <a class="nav-link" href="pages/forms/create_new_admin.php">
+                    <span class="icon-bg"><i class="mdi mdi-account-plus menu-icon"></i></span>
+                    <span class="menu-title">Create New Admin</span>
+                </a>
             </li>
             <!-- <li class="nav-item">
               <a class="nav-link" href="pages/charts/chartjs.html">
@@ -322,44 +331,44 @@ if($adminDetails['fullname'] == null) {
                       <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
                         <div class="card">
                           <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Orders</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold"><?= $totalOrder['totalOrders'] ?></h2>
+                            <h5 class="mb-2 text-dark font-weight-normal">Total Customer</h5>
+                            <h2 class="mb-4 text-dark font-weight-bold"><?= $totalCustomer ?></h2>
                             <div class="dashboard-progress dashboard-progress-1 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-lightbulb icon-md absolute-center text-dark"></i></div>
-                            <p class="mt-4 mb-0">Completed</p>
-                            <h3 class="mb-0 font-weight-bold mt-2 text-dark"><?= $totalOrder['totalOrders'] ?></h3>
+                            <p class="mt-4 mb-0">Total</p>
+                            <h3 class="mb-0 font-weight-bold mt-2 text-dark"><?= $totalCustomer ?></h3>
                           </div>
                         </div>
                       </div>
                       <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
                         <div class="card">
                           <div class="card-body text-center">
-                            <h5 class="mb-2 text-dark font-weight-normal">Total Items</h5>
-                            <h2 class="mb-4 text-dark font-weight-bold"><?= $totalItem['TotalItem'] ?></h2>
+                            <h5 class="mb-2 text-dark font-weight-normal">Total Sellers</h5>
+                            <h2 class="mb-4 text-dark font-weight-bold"><?= $totalSeller ?></h2>
                             <div class="dashboard-progress dashboard-progress-2 d-flex align-items-center justify-content-center item-parent"><i class="mdi mdi-account-circle icon-md absolute-center text-dark"></i></div>
                             <p class="mt-4 mb-0">Increased since yesterday</p>
-                            <h3 class="mb-0 font-weight-bold mt-2 text-dark">50%</h3>
+                            <h3 class="mb-0 font-weight-bold mt-2 text-dark"><?= $totalSeller ?></h3>
                           </div>
                         </div>
                       </div>
                       <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
                           <div class="card">
                               <div class="card-body text-center">
-                                  <h5 class="mb-2 text-dark font-weight-normal">Total Revenue</h5>
-                                  <h2 class="mb-4 text-dark font-weight-bold">₱ <?= $totalRevenue; ?></h2>
+                                  <h5 class="mb-2 text-dark font-weight-normal">Total Commision</h5>
+                                  <h2 class="mb-4 text-dark font-weight-bold">₱ <?= $totalCommission ?></h2>
                                   <div class="dashboard-progress dashboard-progress-3 d-flex align-items-center justify-content-center item-parent">
                                       <!-- Replace mdi-eye with the desired icon class -->
                                       <i class="mdi mdi-trending-up icon-md absolute-center text-dark"></i>
                                   </div>
                                   <p class="mt-4 mb-0">Increased since yesterday</p>
-                                  <h3 class="mb-0 font-weight-bold mt-2 text-dark"><?= $increaseSinceYesterday; ?>%</h3>
+                                  <h3 class="mb-0 font-weight-bold mt-2 text-dark">44 %</h3>
                               </div>
                           </div>
                       </div>
                       <div class="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
                           <div class="card">
                               <div class="card-body text-center">
-                                  <h5 class="mb-2 text-dark font-weight-normal">Expected Revenue</h5>
-                                  <h2 class="mb-4 text-dark font-weight-bold">₱ <?= $expectedRevenue ?></h2>
+                                  <h5 class="mb-2 text-dark font-weight-normal">Total GMV</h5>
+                                  <h2 class="mb-4 text-dark font-weight-bold">₱ <?= $totalGMV ?></h2>
                                   <div class="dashboard-progress dashboard-progress-4 d-flex align-items-center justify-content-center item-parent">
                                       <!-- Replace mdi-cube with the desired icon class -->
                                       <i class="mdi mdi-currency-usd icon-md absolute-center text-dark"></i>

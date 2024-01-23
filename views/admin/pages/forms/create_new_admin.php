@@ -1,8 +1,7 @@
 <?php include($_SERVER['DOCUMENT_ROOT'].'/e-commerce/php/init.php'); ?>
-<?php ob_start(); ?>
+
 <?php $sellerDetails = userDetails(); ?>
 <?php $products = viewSellerProduct($sellerDetails['fullname']); ?>
-<?php $sellerData = viewSellerDetails($sellerDetails['id']); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -269,27 +268,29 @@
               </div>
             </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="../../pages/products/product_list.php">
-                <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-                <span class="menu-title">Products</span>
+              <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
+                <span class="menu-title">Manage</span>
+                <i class="menu-arrow"></i>
               </a>
+              <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="../list/seller_accounts.php">Seller Accounts</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../list/customer_accounts.php">Customer Accounts</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../list/products.php">Products</a></li>
+                </ul>
+              </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../../pages/forms/add_new_product.php">
-                <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-                <span class="menu-title">Add Product</span>
-              </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../../pages/tables/orders.php">
-                    <span class="icon-bg"><i class="mdi mdi-cart menu-icon"></i></span>
-                    <span class="menu-title">Order</span>
+                <a class="nav-link" href="../../pages/list/seller_sales.php">
+                    <span class="icon-bg"><i class="mdi mdi-chart-line menu-icon"></i></span>
+                    <span class="menu-title">Sales Overview</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../../pages/tables/order_history.php">
-                    <span class="icon-bg"><i class="mdi mdi-history menu-icon"></i></span>
-                    <span class="menu-title">Order History</span>
+                <a class="nav-link" href="../../pages/forms/create_new_admin.php">
+                    <span class="icon-bg"><i class="mdi mdi-account-plus menu-icon"></i></span>
+                    <span class="menu-title">Create New Admin</span>
                 </a>
             </li>
             <li class="nav-item sidebar-user-actions mt-3">
@@ -311,7 +312,7 @@
             </li>
             <li class="nav-item sidebar-user-actions">
               <div class="sidebar-user-menu">
-                <a href="./settings.php" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
+                <a href="#" class="nav-link"><i class="mdi mdi-settings menu-icon"></i>
                   <span class="menu-title">Settings</span>
                 </a>
               </div>
@@ -334,11 +335,11 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Bussiness Settings </h3>
+              <h3 class="page-title"> ADMIN </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Bussiness Settings</li>
+                  <li class="breadcrumb-item active" aria-current="page">ADD PRODUCT</li>
                 </ol>
               </nav>
             </div>
@@ -346,97 +347,42 @@
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <?php
-                    if(isset($_SESSION['status'])) {
-                        echo $_SESSION['status'];
-                        unset($_SESSION['status']);
-                    }
-                    if(isset($_SESSION['update_status'])) {
-                      echo $_SESSION['update_status'];
-                      unset($_SESSION['update_status']);
-                  }
-                    ?>
-                    <h4 class="card-title">Manage Account Settings</h4>
-                    <?php businessSettings(); ?>
+                    <h4 class="card-title">Create New Admin</h4>
+                    <?php createNewAdmin(); ?>
                     <p class="card-description"> Lorem ipsum </p>
-                    <img src="/e-commerce/img/business_account/<?= isset($sellerData['image']) ? $sellerData['image'] : '' ?>" alt="Store image" height="200px" class="mb-3">
-                    <form action="" method="post" enctype="multipart/form-data" class="forms-sample">
-                    <div class="form-group">
-                            <label for="product_image">Business Image</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image" aria-describedby="file-upload-info">
-                                    <label class="custom-file-label" style="padding-top: 10px;">Choose file</label>
-                                </div>
-                            </div>
+                      <form class="forms-sample" method="post">
+                      <div class="form-group">
+                            <label for="firstname">First Name</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter firstname" required />
                         </div>
                         <div class="form-group">
-                            <label for="store_name">Store Name</label>
-                            <input type="text" class="form-control" id="store_name" name="store_name" placeholder="Enter Store Name" value="<?= isset($sellerData['storename']) ? $sellerData['storename'] : '' ?>" required>
+                            <label for="lastname">last Name</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter lastname" required />
                         </div>
-
                         <div class="form-group">
-                            <label for="fname">First Name</label>
-                            <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter First Name" value="<?= isset($sellerData['firstname']) ? $sellerData['firstname'] : '' ?>" required>
+                            <label for="middlename">Middle Name</label>
+                            <input type="text" class="form-control" id="middlename" name="middlename" placeholder="Enter middlename" required />
                         </div>
-
-                        <div class="form-group">
-                            <label for="lname">Last Name</label>
-                            <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Last Name" value="<?= isset($sellerData['lastname']) ? $sellerData['lastname'] : '' ?>" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="mname">Middle Name</label>
-                            <input type="text" class="form-control" id="mname" name="mname" placeholder="Enter Middle Name" value="<?= isset($sellerData['middlename']) ? $sellerData['middlename'] : '' ?>" required>
-                        </div>
-
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?= isset($sellerData['email']) ? $sellerData['email'] : '' ?>" required>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" required />
                         </div>
 
-                        <input type="hidden" name="id" value="<?= $sellerDetails['id'] ?>">
-
-                        <button type="submit" name="submit" class="btn btn-primary mr-2">Save Changes</button>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Retype Password" required />
+                        </div>
+                        <button type="submit" name="submit" class="btn btn-primary mr-2">Create account</button>
+                        <button class="btn btn-light">Cancel</button>
                     </form>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- Second Card -->
-            <div class="row">
-                <div class="col-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <?php sellerChangePassword(); ?>
-                            <h4 class="card-title">Security Settings</h4>
-
-                            <!-- Form for Security Settings -->
-                            <form action="" method="post" class="forms-sample">
-                                <div class="form-group">
-                                    <label for="old_password">Old Password</label>
-                                    <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Enter Old Password" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="new_password">New Password</label>
-                                    <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter New Password" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="confirm_password">Confirm New Password</label>
-                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm New Password" required>
-                                </div>
-
-                                <input type="hidden" name="seller_id" value="<?= $sellerDetails['id'] ?>">
-
-                                <button type="submit" name="security_submit" class="btn btn-primary mr-2">Save Security Changes</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->

@@ -351,15 +351,10 @@
                         echo $_SESSION['status'];
                         unset($_SESSION['status']);
                     }
-                    if(isset($_SESSION['update_status'])) {
-                      echo $_SESSION['update_status'];
-                      unset($_SESSION['update_status']);
-                  }
                     ?>
                     <h4 class="card-title">Manage Account Settings</h4>
                     <?php businessSettings(); ?>
                     <p class="card-description"> Lorem ipsum </p>
-                    <img src="/e-commerce/img/business_account/<?= isset($sellerData['image']) ? $sellerData['image'] : '' ?>" alt="Store image" height="200px" class="mb-3">
                     <form action="" method="post" enctype="multipart/form-data" class="forms-sample">
                     <div class="form-group">
                             <label for="product_image">Business Image</label>
@@ -393,6 +388,11 @@
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?= isset($sellerData['email']) ? $sellerData['email'] : '' ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Business Description</label>
+                            <textarea class="form-control" id="description" name="description" placeholder="Enter Business Description" rows="4" required><?= isset($sellerData['storename']) ? $sellerData['storename'] : '' ?></textarea>
                         </div>
 
                         <input type="hidden" name="id" value="<?= $sellerDetails['id'] ?>">

@@ -293,12 +293,12 @@ if($adminDetails['fullname'] == null) {
                 </ul>
               </div>
             </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../../pages/products/product_list.php">
-              <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-              <span class="menu-title">Products</span>
-            </a>
-          </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pages/list/seller_sales.php">
+                    <span class="icon-bg"><i class="mdi mdi-chart-line menu-icon"></i></span>
+                    <span class="menu-title">Sales Overview</span>
+                </a>
+            </li>
           <li class="nav-item">
             <a class="nav-link" href="../../pages/forms/add_new_product.php">
               <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
@@ -400,7 +400,7 @@ if($adminDetails['fullname'] == null) {
                                             <td><?= $account['firstname']. " ".$account['lastname']. " ". $account['middlename'] ?></td>
                                             <td><?= $account['email'] ?></td>
                                             <td><?= $account['storename'] ?></td>
-                                            <td><a href="/view-account.php?id=<?= $account['id']; ?>" class="btn btn-primary btn-sm">View</a></td>
+                                            <td><a href="/e-commerce/views/admin/pages/list/seller_details.php?id=<?= $account['id']; ?>" class="btn btn-primary btn-sm">View</a></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
