@@ -539,8 +539,42 @@ class View extends Config {
         return $salesWithAdminShare;
     }
     
+    public function searchStores() {
+        if(isset($_POST['search_store'])) {
+            $search = $_POST['store'];
     
-     
+            $connection = $this->openConnection();
+            $stmt = $connection->prepare("SELECT * FROM `user_tbl` WHERE `storename` LIKE ?");
+            $stmt->execute(["%$search%"]);
+            $data = $stmt->fetchAll();
+    
+            return $data;
+        }
+    }
+
+    public function searchItem() {
+        if(isset($_POST['search_item'])) {
+
+            $search = $_POST['item'];
+            $seller_name = $_POST['seller_name'];
+            $connection = $this->openConnection();
+            $stmt = $connection->prepare("SELECT * FROM `productItems_tbl` WHERE `vendor_name` LIKE ? AND `added_by` = ?");
+            $stmt->execute(["%$search%",$seller_name]);
+            $data = $stmt->fetchAll();
+    
+            return $data;
+        }
+    }   
+    
+    public function viewBestSellerDetails($seller) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `productItems_tbl` WHERE `added_by` = ? ORDER BY qty ASC LIMIT 6");
+        $stmt->execute([$seller]);
+        $data = $stmt->fetchAll();
+
+        return $data;
+    }
+      
 
 
 

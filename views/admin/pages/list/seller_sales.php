@@ -303,6 +303,12 @@ if($adminDetails['fullname'] == null) {
                     <span class="menu-title">Sales Overview</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pages/forms/create_new_admin.php">
+                    <span class="icon-bg"><i class="mdi mdi-account-plus menu-icon"></i></span>
+                    <span class="menu-title">Create New Admin</span>
+                </a>
+            </li>
           <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="icon-bg"><i class="mdi mdi-crosshairs-gps menu-icon"></i></span>
@@ -319,12 +325,6 @@ if($adminDetails['fullname'] == null) {
               </ul>
             </div>
           </li> -->
-          <li class="nav-item">
-            <a class="nav-link" href="../../pages/forms/add_new_product.php">
-              <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-              <span class="menu-title">Add Product</span>
-            </a>
-          </li>
           <!-- <li class="nav-item">
             <a class="nav-link" href="../../pages/charts/chartjs.html">
               <span class="icon-bg"><i class="mdi mdi-chart-bar menu-icon"></i></span>

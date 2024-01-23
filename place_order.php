@@ -133,12 +133,11 @@ if (!$access) {
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
                                     <li><a href="./my_address.php">My Address</a></li>
+                                    <li><a href="./logout.php">Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./settings.php">Settings</a></li>
                         </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -209,13 +208,12 @@ if (!$access) {
                             <li><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
+                                <li><a href="./shoping-cart.php">Shoping Cart</a></li>
                                     <li><a href="./my_address.php">My Address</a></li>
+                                    <li><a href="./logout.php">Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./settings.php">Settings</a></li>
                         </ul>
                     </nav>
                 </div>

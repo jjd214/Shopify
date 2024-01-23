@@ -89,13 +89,12 @@ $randomStores = viewRandomStores();
                             <li><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
+                                <li><a href="./shoping-cart.php">Shoping Cart</a></li>
                                     <li><a href="./my_address.php">My Address</a></li>
+                                    <li><a href="./logout.php">Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./settings.php">Settings</a></li>
                         </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -166,13 +165,12 @@ $randomStores = viewRandomStores();
                             <li><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
+                                <li><a href="./shoping-cart.php">Shoping Cart</a></li>
                                     <li><a href="./my_address.php">My Address</a></li>
+                                    <li><a href="./logout.php">Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./settings.php">Settings</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -213,13 +211,13 @@ $randomStores = viewRandomStores();
                 <div class="col-lg-9">
                     <div class="hero__search">
                         <div class="hero__search__form">
-                            <form action="#">
+                            <form action="" method="post">
                                 <div class="hero__search__categories">
-                                    All Categories
+                                    Find Stores?
                                     <span class="arrow_carrot-down"></span>
                                 </div>
-                                <input type="text" placeholder="What do yo u need?">
-                                <button type="submit" class="site-btn">SEARCH</button>
+                                <input type="text" name="store" placeholder="Search Storename">
+                                <button type="submit" name="search_store" class="site-btn">SEARCH</button>
                             </form>
                         </div>
                         <div class="hero__search__phone">
@@ -260,21 +258,24 @@ $randomStores = viewRandomStores();
     <section class="product spad">
         <div class="container">
             <div class="row">
-            <?php foreach ($stores as $store) : ?>
+            <?php $search_result = searchStore();?>
+            <?php $storesToDisplay = isset($search_result) ? $search_result : $stores; ?>
+            <?php foreach ($storesToDisplay as $store) : ?>
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="product__item text-center">
                         <!-- Make only the image an anchor tag -->
                         <a href="store_details.php?storeid=<?= $store['id']; ?>">
-                            <div class="product__item__pic set-bg" data-setbg="/e-commerce/img/business_account/<?= $store['image']; ?>">
+                            <div class="product__item__pic set-bg" data-setbg="/e-commerce/img/business_account/<?= $store['image'] ?? 'placeholder.jpg'; ?>" alt="<?= $store['storename']; ?>">
                             </div>
                         </a>
                         <div class="product__item__text">
-                            <h6><a href="store_details.php"><?= $store['storename']; ?></a></h6>
+                            <h6><a href="store_details.php?storeid=<?= $store['id']; ?>"><?= $store['storename']; ?></a></h6>
                             <!-- You can add other information about the store here -->
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
+
             </div>
         </div>
     </section>
@@ -353,6 +354,13 @@ $randomStores = viewRandomStores();
             </div>
         </div>
     </footer>
+
+    <script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->

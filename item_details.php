@@ -15,9 +15,10 @@ $user = $access;
 <?php $products = viewRelatedProducts($id); ?>
 <?php $itemDetails = viewItemDetails(); ?>
 <?php $customerID = userDetails(); ?>
-
+<?php $randomStores = viewRandomStores(); ?>
 <?php addToMyCart(); ?>
 <?php $store = viewSingleStoreDetails($_SESSION['store_id']); ?>
+
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -83,13 +84,12 @@ $user = $access;
                             <li><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
+                                <li><a href="./shoping-cart.php">Shoping Cart</a></li>
                                     <li><a href="./my_address.php">My Address</a></li>
+                                    <li><a href="./logout.php">Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./settings.php">Settings</a></li>
                         </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -160,13 +160,12 @@ $user = $access;
                             <li><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
+                                <li><a href="./shoping-cart.php">Shoping Cart</a></li>
                                     <li><a href="./my_address.php">My Address</a></li>
+                                    <li><a href="./logout.php">Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./settings.php">Settings</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -195,20 +194,12 @@ $user = $access;
                     <div class="hero__categories">
                         <div class="hero__categories__all">
                             <i class="fa fa-bars"></i>
-                            <span>All departments</span>
+                            <span>Stores</span>
                         </div>
                         <ul>
-                            <li><a href="#">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
-                            <li><a href="#">Fastfood</a></li>
-                            <li><a href="#">Fresh Onion</a></li>
-                            <li><a href="#">Papayaya & Crisps</a></li>
-                            <li><a href="#">Oatmeal</a></li>
-                            <li><a href="#">Fresh Bananas</a></li>
+                            <?php foreach($randomStores as $stores) : ?>
+                            <li><a href="store_details.php?storeid=<?= $stores['id']; ?>"><?= $stores['storename'] ?></a></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>

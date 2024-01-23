@@ -394,4 +394,32 @@ function createNewAdmin() {
     $admin = new Admin();
     $admin->create_new_admin();
 }
+
+function searchStore() {
+    $view = new View();
+    $store = $view->searchStores();
+
+    return $store;
+}
+
+function searchItem() {
+    $view = new View();
+    $item = $view->searchItem();
+
+    return $item;
+}
+
+function bestSellers($seller) {
+    $view = new View();
+    $best = $view->viewBestSellerDetails($seller);
+
+    return $best;
+}
+
+function viewPriceInCart($customer_id) {
+    $view = new View();
+    $price = $view->viewPriceInCart($customer_id);
+
+    return $price;
+}
 ?>

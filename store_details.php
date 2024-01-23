@@ -31,6 +31,7 @@ $user = $access;
 <?php $product = productDetails(); ?>
 <?php $stocks = viewAllStocks(); ?>
 <?php $randProducts = getRandomProducts($seller); ?>
+<?php $bestSellers = bestSellers($seller); ?>
 
 
 <!DOCTYPE html>
@@ -106,13 +107,12 @@ $user = $access;
                             <li><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
+                                <li><a href="./shoping-cart.php">Shoping Cart</a></li>
                                     <li><a href="./my_address.php">My Address</a></li>
+                                    <li><a href="./logout.php">Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./settings.php">Settings</a></li>
                         </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -183,13 +183,12 @@ $user = $access;
                             <li><a href="./stores.php">Stores</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
+                                <li><a href="./shoping-cart.php">Shoping Cart</a></li>
                                     <li><a href="./my_address.php">My Address</a></li>
+                                    <li><a href="./logout.php">Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
+                            <li><a href="./settings.php">Settings</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -218,7 +217,7 @@ $user = $access;
                     <div class="hero__categories">
                         <div class="hero__categories__all">
                             <i class="fa fa-bars"></i>
-                            <span>All departments</span>
+                            <span>All Category</span>
                         </div>
                         <ul>
                         <?php foreach($sellerProduct as $product) { ?>
@@ -241,13 +240,14 @@ $user = $access;
                 <div class="col-lg-9">
                     <div class="hero__search">
                         <div class="hero__search__form">
-                            <form action="#">
+                            <form action="" method="post">
                                 <div class="hero__search__categories">
-                                    All Categories
+                                    Find item?
                                     <span class="arrow_carrot-down"></span>
                                 </div>
-                                <input type="text" placeholder="What do yo u need?">
-                                <button type="submit" class="site-btn">SEARCH</button>
+                                <input type="hidden" name="seller_name" value="<?= $seller ?>">
+                                <input type="text" name="item" placeholder="What do yo u need?">
+                                <button type="submit" name="search_item" class="site-btn">SEARCH</button>
                             </form>
                         </div>
                         <div class="hero__search__phone">
@@ -418,118 +418,30 @@ $user = $access;
                 <div class="col-lg-9 col-md-7">
                     <div class="product__discount">
                         <div class="section-title product__discount__title">
-                            <h2>Sale Off</h2>
+                            <h2>Best Sellers</h2>
                         </div>
                         <div class="row">
                             <div class="product__discount__slider owl-carousel">
+                                <?php foreach($bestSellers as $items) : ?>
                                 <div class="col-lg-4">
                                     <div class="product__discount__item">
                                         <div class="product__discount__item__pic set-bg"
-                                            data-setbg="img/product/discount/pd-1.jpg">
+                                            data-setbg="/e-commerce/uploads/<?= isset($items['product_image']) ? $items['product_image'] : $defaultImage ?>">
                                             <div class="product__discount__percent">-20%</div>
                                             <ul class="product__item__pic__hover">
-                                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                        <li><a href="/e-commerce/item_details.php?id=<?= $items['id'] ?>"><i
+                                                    class="fa fa-eye"></i></a></li>
+                                        <li><a href="add_to_cart.php?id=<?= $items['id'] ?>"><i
+                                                    class="fa fa-shopping-cart"></i></a></li>
                                             </ul>
                                         </div>
                                         <div class="product__discount__item__text">
-                                            <span>Dried Fruit</span>
-                                            <h5><a href="#">Raisin’n’nuts</a></h5>
-                                            <div class="product__item__price">$30.00 <span>$36.00</span></div>
+                                            <h5><a href="#"><?= $items['vendor_name'] ?></a></h5>
+                                            <div class="product__item__price">₱ <?= $items['price'] ?></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <div class="product__discount__item">
-                                        <div class="product__discount__item__pic set-bg"
-                                            data-setbg="img/product/discount/pd-2.jpg">
-                                            <div class="product__discount__percent">-20%</div>
-                                            <ul class="product__item__pic__hover">
-                                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="product__discount__item__text">
-                                            <span>Vegetables</span>
-                                            <h5><a href="#">Vegetables’package</a></h5>
-                                            <div class="product__item__price">$30.00 <span>$36.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="product__discount__item">
-                                        <div class="product__discount__item__pic set-bg"
-                                            data-setbg="img/product/discount/pd-3.jpg">
-                                            <div class="product__discount__percent">-20%</div>
-                                            <ul class="product__item__pic__hover">
-                                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="product__discount__item__text">
-                                            <span>Dried Fruit</span>
-                                            <h5><a href="#">Mixed Fruitss</a></h5>
-                                            <div class="product__item__price">$30.00 <span>$36.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="product__discount__item">
-                                        <div class="product__discount__item__pic set-bg"
-                                            data-setbg="img/product/discount/pd-4.jpg">
-                                            <div class="product__discount__percent">-20%</div>
-                                            <ul class="product__item__pic__hover">
-                                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="product__discount__item__text">
-                                            <span>Dried Fruit</span>
-                                            <h5><a href="#">Raisin’n’nuts</a></h5>
-                                            <div class="product__item__price">$30.00 <span>$36.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="product__discount__item">
-                                        <div class="product__discount__item__pic set-bg"
-                                            data-setbg="img/product/discount/pd-5.jpg">
-                                            <div class="product__discount__percent">-20%</div>
-                                            <ul class="product__item__pic__hover">
-                                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="product__discount__item__text">
-                                            <span>Dried Fruit</span>
-                                            <h5><a href="#">Raisin’n’nuts</a></h5>
-                                            <div class="product__item__price">$30.00 <span>$36.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="product__discount__item">
-                                        <div class="product__discount__item__pic set-bg"
-                                            data-setbg="img/product/discount/pd-6.jpg">
-                                            <div class="product__discount__percent">-20%</div>
-                                            <ul class="product__item__pic__hover">
-                                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="product__discount__item__text">
-                                            <span>Dried Fruit</span>
-                                            <h5><a href="#">Raisin’n’nuts</a></h5>
-                                            <div class="product__item__price">$30.00 <span>$36.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
@@ -558,54 +470,36 @@ $user = $access;
                         </div>
                     </div>
                     <div class="row">
-                        <?php $defaultImage = 'default.png'; ?>
+                    <?php
+                    $defaultImage = 'default.png';
+                    $search_result = searchItem();
+                    $productsToDisplay = isset($search_result) ? $search_result : (!empty($stocks) ? $stocks : $randProducts);
 
-                        <?php if (!empty($stocks)) { ?>
-                        <?php foreach ($stocks as $stock) { ?>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg"
-                                        data-setbg="/e-commerce/uploads/<?= isset($stock['product_image']) ? $stock['product_image'] : $defaultImage ?>">
-                                        <ul class="product__item__pic__hover">
-                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                            <li><a href="/e-commerce/item_details.php?id=<?= $stock['id'] ?>"><i class="fa fa-eye"></i></a></li>
-                                            <li><a href="add_to_cart.php?id=<?= $stock['id'] ?>"><i class="fa fa-shopping-cart"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <h6><a href="/e-commerce/views/items_details.php?id=<?= $stock['id'] ?>">
-                                                <?= $stock['vendor_name'] ?>
-                                            </a></h6>
-                                        <h5>₱ <?= number_format($stock['price'], 2) ?></h5>
-                                    </div>
+                    foreach ($productsToDisplay as $product) :
+                        ?>
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg"
+                                    data-setbg="/e-commerce/uploads/<?= isset($product['product_image']) ? $product['product_image'] : $defaultImage ?>">
+                                    <ul class="product__item__pic__hover">
+                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                        <li><a href="/e-commerce/item_details.php?id=<?= $product['id'] ?>"><i
+                                                    class="fa fa-eye"></i></a></li>
+                                        <li><a href="add_to_cart.php?id=<?= $product['id'] ?>"><i
+                                                    class="fa fa-shopping-cart"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6><a href="/e-commerce/views/items_details.php?id=<?= $product['id'] ?>">
+                                            <?= $product['vendor_name'] ?>
+                                        </a></h6>
+                                    <h5>₱ <?= number_format($product['price'], 2) ?></h5>
                                 </div>
                             </div>
-                        <?php } ?>
-                    <?php } else { ?>
-                        <?php foreach ($randProducts as $product) { ?>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg"
-                                        data-setbg="/e-commerce/uploads/<?= isset($product['product_image']) ? $product['product_image'] : $defaultImage ?>">
-                                        <ul class="product__item__pic__hover">
-                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                            <li><a href="/e-commerce/item_details.php?id=<?= $product['id'] ?>"><i class="fa fa-eye"></i></a></li>
-                                            <li><a href="add_to_cart.php?id=<?= $product['id'] ?>"><i class="fa fa-shopping-cart"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <h6><a href="/e-commerce/views/items_details.php?id=<?= $product['id'] ?>">
-                                                <?= $product['vendor_name'] ?>
-                                            </a></h6>
-                                        <h5>₱ <?= number_format($product['price'], 2) ?></h5>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    <?php } ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
 
-
-                    </div>
                     <div class="product__pagination">
                         <a href="#">1</a>
                         <a href="#">2</a>

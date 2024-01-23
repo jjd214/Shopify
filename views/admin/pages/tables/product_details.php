@@ -312,21 +312,15 @@ if($adminDetails['fullname'] == null) {
               </div>
             </li>
           <li class="nav-item">
-            <a class="nav-link" href="../../pages/products/product_list.php">
-              <span class="icon-bg"><i class="mdi mdi-contacts menu-icon"></i></span>
-              <span class="menu-title">Products</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../../pages/forms/add_new_product.php">
-              <span class="icon-bg"><i class="mdi mdi-format-list-bulleted menu-icon"></i></span>
-              <span class="menu-title">Add Product</span>
-            </a>
-          </li>
-          <li class="nav-item">
                 <a class="nav-link" href="../../pages/list/seller_sales.php">
                     <span class="icon-bg"><i class="mdi mdi-chart-line menu-icon"></i></span>
                     <span class="menu-title">Sales Overview</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pages/forms/create_new_admin.php">
+                    <span class="icon-bg"><i class="mdi mdi-account-plus menu-icon"></i></span>
+                    <span class="menu-title">Create New Admin</span>
                 </a>
             </li>
           <!-- <li class="nav-item">

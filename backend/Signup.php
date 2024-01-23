@@ -157,14 +157,15 @@ class Signup extends Config {
 
             $this->insertUserIntoDatabase();
 
-            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Email verification successfull.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>';
+            // echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            //         Email verification successfull.
+            //         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            //     </div>';
         
             unset($_SESSION['newOTP']);
             unset($_SESSION['signup_data']);
             
+            header("Location: signin.php");
         } else {
             echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                     Incorrect OTP. Please try again.
@@ -259,10 +260,10 @@ class Signup extends Config {
         $result = $stmt->rowCount();
 
         if ($result > 0) {
-            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    User successfully registered.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>';
+            // echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            //         User successfully registered.
+            //         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            //       </div>';
         } else {
             echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                     Failed to register user.
