@@ -34,35 +34,39 @@ if (!$access) {
     
     if(isset($_POST['place_order'])) {
 
-        checkUserIDExist($user['id']);
+        if(isset($_POST['online_payment'])) {
+            header("Location: online_payment.php?id=".$sellerDetails);
+        } else {
+            checkUserIDExist($user['id']);
 
-        $deduct = new Add_cart();
-        $sales = new Sales(new View());
-    
-        $cart_id = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-
-        $deduct->deductQtyItem($qtys, $stock_ids);
-        $sales->insertSales(
-            $stock_ids,
-            $qtys,
-            $prices,
-            $product_id,
-            $customer_name,
-            $customer_id,
-            $cart_id
-        );
-    
-        $deduct->deleteItem($stock_ids);
-
-        unset($_SESSION['stock_ids']);
-        unset($_SESSION['qtys']);
-        unset($_SESSION['prices']);
-        unset($_SESSION['product_id']);
-        unset($_SESSION['customer_name']);
-        unset($_SESSION['customer_id']);
+            $deduct = new Add_cart();
+            $sales = new Sales(new View());
         
-        header("Location: shoping-cart.php");
-        exit();
+            $cart_id = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+    
+            $deduct->deductQtyItem($qtys, $stock_ids);
+            $sales->insertSales(
+                $stock_ids,
+                $qtys,
+                $prices,
+                $product_id,
+                $customer_name,
+                $customer_id,
+                $cart_id
+            );
+        
+            $deduct->deleteItem($stock_ids);
+    
+            unset($_SESSION['stock_ids']);
+            unset($_SESSION['qtys']);
+            unset($_SESSION['prices']);
+            unset($_SESSION['product_id']);
+            unset($_SESSION['customer_name']);
+            unset($_SESSION['customer_id']);
+            
+            header("Location: shoping-cart.php");
+            exit();
+        }
     }
 }
 
@@ -383,20 +387,15 @@ if (!$access) {
                                 <div class="checkout__order__total">Total <span> ₱ <?= number_format($total, 2) ?></span></div>
 
                                 <p>Mode of payment</p>
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment_cash">
-                                        Cash on delivery
-                                        <input type="checkbox" id="payment_cash" required>
-                                        <span class="checkmark"></span>
-                                    </label>
+                                <div class="checkout__input__radio">
+                                    <input type="radio" id="payment_cash" name="payment_method" >
+                                    <label for="payment_cash">Cash on delivery</label>
                                 </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment_paypal">
-                                        Paypal
-                                        <input type="checkbox" id="payment_paypal" required>
-                                        <span class="checkmark"></span>
-                                    </label>
+                                <div class="checkout__input__radio">
+                                    <input type="radio" id="payment_paypal" name="online_payment" >
+                                    <label for="payment_paypal">Gcash</label>
                                 </div>
+
                                 <button type="submit" name="place_order" class="site-btn">PLACE ORDER</button>
                             </div>
                         </div>

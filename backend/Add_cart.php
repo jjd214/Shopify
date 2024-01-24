@@ -32,7 +32,7 @@ class Add_cart extends Config {
             }
     
             if($result > 0) {
-                echo "Item added to cart, and quantity updated in cart_tbl.";
+                header("Location: ".$_SERVER['HTTP_REFERER']);
             } else {
                 echo "Item not added to cart or there was an issue updating quantity in cart_tbl.";
             }

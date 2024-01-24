@@ -478,6 +478,8 @@ class View extends Config {
                                         products_tbl.seller_id = ? AND sales_tbl.status = 'Shipped'
                                     GROUP BY
                                         sales_tbl.cart_id
+                                    ORDER BY
+                                    sales_tbl.date_purchased DESC
                                     ");
         $stmt->execute([$seller_id]);
         $data = $stmt->fetchAll();
@@ -575,7 +577,14 @@ class View extends Config {
         return $data;
     }
       
+    public function viewOnlinePaymentDetails($seller_id) {
+        $connection = $this->openConnection();
+        $stmt = $connection->prepare("SELECT * FROM `online_payment_settings` WHERE `seller_id` = ?");
+        $stmt->execute([$seller_id]);
+        $data = $stmt->fetch();
 
+        return $data;
+    }
 
 
 }

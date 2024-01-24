@@ -61,7 +61,7 @@ class Add_new_stock extends Config {
         }
     }
 
-    public function delete_stock(){
+    public function delete_stock() {
         if(isset($_POST['delete_item'])) {
 
             $id = $_POST['stock_id'];

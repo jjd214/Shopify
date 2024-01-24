@@ -330,10 +330,90 @@ class Account_settings extends Config {
         return true;
     }
     
+    public function onlinePaymentSettings() {
+        if(isset($_POST['submit'])) {
+
+            $gcash_number = $_POST['number'];
+            $fullname = $_POST['gcash_name'];
+            $seller_id = $_POST['seller_id'];
     
+            $connection = $this->openConnection();
     
+            if (!empty($_FILES['qr_code']['name'])) {
+                $img_name = $_FILES['qr_code']['name'];
+                $img_size = $_FILES['qr_code']['size'];
+                $tmp_name = $_FILES['qr_code']['tmp_name'];
+                $error = $_FILES['qr_code']['error'];
     
+                $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+                $img_ex_lc = strtolower($img_ex);
+                $allowed_exs = array("jpg", "jpeg", "png");
     
+                if (in_array($img_ex_lc, $allowed_exs)) {
+                    date_default_timezone_set('Asia/Manila');
+                    $currentDateTime = date('Y-m-d h:i:s A');
+                    $formattedDateTime = date('Y-m-d-h-i-s-A', strtotime($currentDateTime));
+                    $new_img_name = "QR-" . $seller_id . "-" . $formattedDateTime . '.' . $img_ex_lc;
+    
+                    $img_upload_path = '/e-commerce/img/qr_code/' . $new_img_name;
+                    move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'] . $img_upload_path);
+    
+                    // Get the current image name from the database
+                    $stmt_get_image = $connection->prepare("SELECT `qr_code` FROM `online_payment_settings` WHERE `id` = ?");
+                    $stmt_get_image->execute([$seller_id]);
+                    $current_image = $stmt_get_image->fetchColumn();
+    
+                    // Delete the previous image
+                    if ($current_image) {
+                        $previous_image_path = $_SERVER['DOCUMENT_ROOT'] . '/e-commerce/img/qr_code/' . $current_image;
+                        if (file_exists($previous_image_path)) {
+                            unlink($previous_image_path);
+                        }
+                    }
+
+                    // Update user's business settings in the database with the new image
+                    $stmt = $connection->prepare("UPDATE `online_payment_settings` SET `gcash_number`=?, `fullname`=?, `qr_code`=? WHERE `seller_id`=?");
+                    $stmt->execute([$gcash_number, $fullname, $new_img_name, $seller_id]);
+                    $result = $stmt->rowCount();
+    
+                    if($result > 0) {
+                        $_SESSION['update_status'] = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                            Payme settings updated.
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>';
+
+                    header("Location: ".$_SERVER['HTTP_REFERER']);
+                    }
+                } else {
+                    echo '<div class="alert alert-info alert-dismissible fade show" role="alert">
+                            You can\'t upload this type of file.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                } 
+            } else {
+
+                $stmt = $connection->prepare("UPDATE `online_payment_settings` SET `gcash_number`=?, `fullname`=? WHERE `seller_id`=?");
+                $stmt->execute([$gcash_number, $fullname, $seller_id]);
+    
+                $result = $stmt->rowCount();
+    
+                if ($result > 0) {
+                    $_SESSION['update_status'] = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            Business settings updated.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+
+                    header("Location: ".$_SERVER['HTTP_REFERER']);
+                        
+                } else {
+                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Failed to update business settings.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                }
+            }
+        }
+    }
     
 }
 ?>

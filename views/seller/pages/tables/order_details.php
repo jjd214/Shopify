@@ -22,7 +22,7 @@ if (isset($_POST['id'])) :
 
     if (isset($sales_id)) :
 ?>
-        <script>alert("qWEWQe");</script>
+      
 <?php
     else :
 ?>

@@ -422,4 +422,16 @@ function viewPriceInCart($customer_id) {
 
     return $price;
 }
+
+function onlinePaymentSettings() {
+    $settings = new Account_settings();
+    $settings->onlinePaymentSettings();
+}
+
+function viewOnlinePaymentDetails($seller_id) {
+    $view = new View();
+    $details = $view->viewOnlinePaymentDetails($seller_id);
+
+    return $details;
+}
 ?>
